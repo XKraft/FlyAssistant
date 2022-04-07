@@ -60,8 +60,10 @@ int CHANNEL_3_RISE=0,CHANNEL_3_FALL=0,CHANNEL_3_PULSE_WIDE=0;
 int CHANNEL_4_RISE=0,CHANNEL_4_FALL=0,CHANNEL_4_PULSE_WIDE=0;
 int CHANNEL_5_RISE=0,CHANNEL_5_FALL=0,CHANNEL_5_PULSE_WIDE=0;
 int CHANNEL_6_RISE=0,CHANNEL_6_FALL=0,CHANNEL_6_PULSE_WIDE=0;
+int CHANNEL_7_RISE=0,CHANNEL_7_FALL=0,CHANNEL_7_PULSE_WIDE=0;
+int CHANNEL_8_RISE=0,CHANNEL_8_FALL=0,CHANNEL_8_PULSE_WIDE=0;
 
-int ICFLAG_1 = 1,ICFLAG_2 = 1,ICFLAG_3 = 1, ICFLAG_4 = 1, ICFLAG_5 = 1, ICFLAG_6 = 1;
+int ICFLAG_1 = 1,ICFLAG_2 = 1,ICFLAG_3 = 1, ICFLAG_4 = 1, ICFLAG_5 = 1, ICFLAG_6 = 1, ICFLAG_7 = 1, ICFLAG_8 = 1;
 
  int PWM_Mode_N1 =3000;
  int PWM_Mode_N2 =4000;
@@ -110,8 +112,8 @@ float DataProcessing(float IN_Data);
 float ADC_CvtVolt_and_filter(void);
 float get_adc(char adc_id);
 float filter_av(char filter_id);
-void TIM1_Set(uint8_t sta);
-void TIM4_Set(uint8_t sta);
+void TIM3_Set(uint8_t sta);
+void TIM5_Set(uint8_t sta);
 void Data_to_VisualScope(void);
 unsigned short CRC_CHECK(unsigned char *Buf, unsigned char CRC_CNT);
 
@@ -279,18 +281,23 @@ int main(void)
 		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
 		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
 		
-		HAL_TIM_PWM_Init(&htim4);
-		HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+		HAL_TIM_PWM_Init(&htim3);
+		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
+		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);
 		
 
 		/// 使能定时器输入捕获。
-		HAL_TIM_IC_Start_IT(&htim1,TIM_CHANNEL_1);
-		HAL_TIM_IC_Start_IT(&htim1,TIM_CHANNEL_4);
+		HAL_TIM_IC_Start_IT(&htim4,TIM_CHANNEL_1);
+		HAL_TIM_IC_Start_IT(&htim4,TIM_CHANNEL_2);
+		HAL_TIM_IC_Start_IT(&htim4,TIM_CHANNEL_3);
+		HAL_TIM_IC_Start_IT(&htim4,TIM_CHANNEL_4);
 		
-		HAL_TIM_IC_Start_IT(&htim3,TIM_CHANNEL_1);
-		HAL_TIM_IC_Start_IT(&htim3,TIM_CHANNEL_2);
-		HAL_TIM_IC_Start_IT(&htim3,TIM_CHANNEL_3);
-		HAL_TIM_IC_Start_IT(&htim3,TIM_CHANNEL_4);
+		HAL_TIM_IC_Start_IT(&htim5,TIM_CHANNEL_1);
+		HAL_TIM_IC_Start_IT(&htim5,TIM_CHANNEL_2);
+		HAL_TIM_IC_Start_IT(&htim5,TIM_CHANNEL_3);
+		HAL_TIM_IC_Start_IT(&htim5,TIM_CHANNEL_4);
 
 		PIDInit(&PID_Control_Att); 
 		LED1_Flash();
@@ -305,8 +312,8 @@ int main(void)
 	  USART1_RX_STA=0;		//清零
 	  USART2_RX_STA=0;		//清零
 	
-		TIM1_Set(0);			  
-	  TIM4_Set(0);	
+		TIM3_Set(0);			  
+	  TIM5_Set(0);	
 		
 ///*************************************打一个假包，用于获取消息实际长度*************/	
 //		mavlink_msg_altitude_pack(54,0,&msg_tmp,0,1,1,1,1,1,1);                       //
@@ -1255,7 +1262,802 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+/*
+*********************************************************************************************************
+*	函 数 名: PrintfLogo
+*	功能说明: 打印例程名称和例程发布日期, 接上串口线后，打开PC机的超级终端软件可以观察结果
+*	形    参：无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+static void PrintfLogo(void)
+{
+	printf("*************************************************************\n\r");
+	printf("* 例程名称   : %s\r\n", EXAMPLE_NAME);	/* 打印例程名称 */
+	printf("* 例程版本   : %s\r\n", DEMO_VER);		/* 打印例程版本 */
+	printf("* 发布日期   : %s\r\n", EXAMPLE_DATE);	/* 打印例程日期 */
 
+	/* 打印ST固件库版本，这3个定义宏在stm32f40x.h文件中 */
+	printf("* 固件库版本 :STM32F10x_StdPeriph_Driver)\r\n");
+	printf("* \n\r");	/* 打印一行空格 */
+	printf("* QQ    : 665836518 \r\n");
+	printf("* 淘宝店地址 : https://shop144519723.taobao.com/index.htm?spm=2013.1.w5002-13163471369.2.71db1223NyFC4j \r\n");
+	printf("* 梦创电子 \r\n");
+	printf("*************************************************************\n\r");
+}
+
+/*
+*********************************************************************************************************
+*	函 数 名: PrintfHardInfo
+*	功能说明: 打印硬件接线信息
+*	形    参：无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+static void PrintfHardInfo(void)
+{
+  printf("*****************************************************************\r\n");
+	printf("  接线方法: \r\n");
+	printf("**梦创电子四旋翼飞行器室内自动飞行****\r\n");
+  printf("  +5V       <------   5.0V      5V供电\r\n");
+  printf("  GND       -------   GND       地\r\n");
+	printf("  PB0       ------>   PWM3      与遥控器的pitch通道相连\r\n");
+	printf("  PB1       ------>   PWM4      与遥控器的接收机的第五通道相连 \r\n");
+	printf("  PA6       ------>   PWM1      与遥控器接收机油门相连 \r\n");
+	printf("  PB7       ------>   PWM2      与遥控器的偏航通道(YAW)相连\r\n");
+	printf("  PA0       ------>   ADC_CH1   模拟超声波高度测量\r\n");
+	printf("  打印采集数据: \r\n");
+	printf("*****************************************************************\r\n");
+}
+
+
+
+unsigned short CRC_CHECK(unsigned char *Buf, unsigned char CRC_CNT)
+{
+    unsigned short CRC_Temp;
+    unsigned char i,j;
+    CRC_Temp = 0xffff;
+
+    for (i=0;i<CRC_CNT; i++){      
+        CRC_Temp ^= Buf[i];
+        for (j=0;j<8;j++) {
+            if (CRC_Temp & 0x01)
+                CRC_Temp = (CRC_Temp >>1 ) ^ 0xa001;
+            else
+                CRC_Temp = CRC_Temp >> 1;
+        }
+    }
+    return(CRC_Temp);
+}
+
+//*********************OutPut_Data****************************************//
+void OutPut_Data(void)
+{
+  int temp[4] = {0};
+  unsigned int temp1[4] = {0};
+  unsigned char databuf[10] = {0};
+  unsigned char i;
+  unsigned short CRC16 = 0;
+  for(i=0;i<4;i++)
+   {
+    
+    temp[i]  = (int16_t)OutData[i];
+    temp1[i] = (int16_t)temp[i];
+    
+   }
+   
+  for(i=0;i<4;i++) 
+  {
+    databuf[i*2]   = (int8_t)(temp1[i]%256);
+    databuf[i*2+1] = (int8_t)(temp1[i]/256);
+  }
+  
+  CRC16 = CRC_CHECK(databuf,8);
+  databuf[8] = CRC16%256;
+  databuf[9] = CRC16/256;
+  
+  for(i=0;i<10;i++)
+	{
+		BSP_USART_SendArray_LL( USART1,databuf,sizeof(databuf));
+		//HAL_UART_Transmit(&huart1,(uint8_t *)&databuf[i],1,10);       //串口发送
+	}
+}
+
+
+
+//****************************Data_to_VisualScope***************************************//
+void Data_to_VisualScope(void)
+{	
+		int16_t i;	
+    for(i = 0; i < CH_NUM; i++)
+    {
+      OutData[i] = s_volt[i];
+      OutPut_Data();
+    }
+}
+
+
+/*
+*********************************************************************************************************
+*	函 数 名: AD转化函数
+*	功能说明: 处理采样后的数据
+*	形    参：无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+float ADC_CvtVolt(void)
+{
+	float volt=0;
+	uint8_t i;
+	int16_t adc;
+	for(i=0;i<CH_NUM;i++)
+	{
+
+		HAL_ADC_Start(&hadc1);
+		HAL_ADC_PollForConversion(&hadc1,0xffff);
+
+		ADC_ReadBuffer[i] = HAL_ADC_GetValue(&hadc1);
+		s_dat[i] = ADC_ReadBuffer[i];
+		adc = s_dat[i];
+		s_volt[i] = (adc * 3.30f) / 4096;
+	}	
+	HAL_ADC_Stop(&hadc1);
+	volt=s_volt[0]*voltage_ratio ; 
+	return  volt;
+}
+
+
+/*
+*********************************************************************************************************
+*	函 数 名: AD7606_Mak
+*	功能说明: 处理采样后的数据
+*	形    参：无
+*	返 回 值: 无
+*********************************************************************************************************
+*/
+float ADC_CvtVolt_and_filter(void)
+{
+	float ADC_read=0.0;
+	ADC_read=filter_av(1);
+	return  ADC_read;
+}
+
+
+//***********读取ADC****************//
+float get_adc(char adc_id)
+{
+	float volt=0;
+	int16_t adc;
+	HAL_ADC_Start(&hadc1);
+	HAL_ADC_PollForConversion(&hadc1,0xffff);
+
+	adc=HAL_ADC_GetValue(&hadc1);
+	volt = ((adc * 3.30f) / 4096)*voltage_ratio;
+	HAL_ADC_Stop(&hadc1);
+	HAL_Delay(1);	
+	//printf("V=%2.2f V Data_after_Deal=%2.2f cm  H=%2.2f cm  (count0=%4.1d) pwm_duty_out=%2.2f pwm_out=%d control_val=%2.2d \r\n",volt_0/voltage_ratio,Data_after_Deal,volt_0,count0,pwm_duty_out,PWM_Out,control_val); 
+	return  volt;
+}
+
+//********算数平均滤波法**************//
+float filter_av(char filter_id)
+{
+	char count=0;
+	float sum = 0.0;
+	for ( count=0;count<N;count++)
+	{
+	 sum  = sum + get_adc(1);
+	}
+	return sum/N;
+}
+
+
+//************************************数据处理函数********************************//
+float DataProcessing(float IN_Data)
+{
+	static float out_Data=0,last_Data=0,filter_Data=0; //static只初始化一次
+	out_Data  = 0.7*IN_Data+0.3*last_Data;
+	filter_Data  = filter(out_Data);
+	last_Data = filter_Data;
+	return filter_Data;
+}
+
+
+float filter(float new_value)
+{
+if(new_value>200)
+	new_value=200;
+if(new_value<10)
+	new_value=10;
+if ( ( new_value - old_value > A ) || ( old_value - new_value > A ))
+ {
+	old_value = old_value;
+	return old_value;
+ }
+ old_value = new_value;
+ return new_value;
+}
+
+
+
+void   USART_RxCallback(USART_TypeDef *huart)
+{ 
+	mavlink_message_t msg;
+	mavlink_status_t status;
+	//***********串口1中断**********************************
+	if(LL_USART_IsActiveFlag_RXNE(huart) && LL_USART_IsEnabledIT_RXNE(huart))
+  { // 接收到来自上位机的命令
+		if(huart == USART1)
+		{
+			uint8_t data = LL_USART_ReceiveData8(huart);
+			if(data == 0x23)
+			{
+				UART1_Frame_Flag = 1;
+			}
+			//printf("USART1_RX_STA =%d data = %d \r\n",USART1_RX_STA , data);
+      if(((USART1_RX_STA  & (1<<15))==0) && (UART1_Frame_Flag == 1))		//还可以接收数据 ,最高位不为1.
+			{
+				//TIM4->CNT=0;				//计数器清空
+				USART1_RX_BUF[USART1_RX_STA++] = data;				//记录接收到的值
+				Recv_Cnt ++;
+				if(USART1_RX_STA == 0)
+				{
+					Recv_Cnt=0;
+				//	TIM4_Set(1);	 	                //使能定时器4的中断 
+				}
+				else if(Recv_Cnt>=11)
+				{
+				 Recv_Cnt=0;
+				 UART1_Frame_Flag = 0;
+				 USART1_RX_STA |= 1<<15;				 //强制标记接收完成
+			   LL_USART_DisableIT_RXNE(USART1);
+				}
+				//BSP_USART_SendArray_LL( USART1,&USART1_RX_BUF[USART1_RX_STA],1);
+				//printf("USART1 INT =%d \r\n",USART1_RX_STA);
+			}	
+		}
+	 //***********串口2中断**********************************
+		else if(huart == USART2)
+		{
+			uint8_t data = LL_USART_ReceiveData8(huart);
+			if(data == 0xFE)
+			{
+				UART2_Frame_Flag = 1;
+			}
+			//printf("USART2_RX_STA =%d data = %d \r\n",USART2_RX_STA , data);
+      if((USART2_RX_STA  & (1<<15))==0 && (UART2_Frame_Flag == 1))		//还可以接收数据 ,最高位不为1.
+			{
+				//TIM1->CNT=0;				//计数器清空
+				USART2_RX_BUF[USART2_RX_STA++] = data;
+				Recv_Cnt_UART2 ++;
+				if(USART2_RX_STA == 0)
+				{
+					//TIM1_Set(1);	 	                //使能定时器1的中断
+						Recv_Cnt_UART2 = 0;
+				}
+        //printf("USART2 INT =%d \r\n",USART2_RX_STA);				
+				else if(Recv_Cnt_UART2>=50)
+				{
+					Recv_Cnt_UART2 = 0;
+					UART2_Frame_Flag = 0;
+					USART2_RX_STA |= 1<<15;					//强制标记接收完成
+					LL_USART_DisableIT_RXNE(USART2);
+				}	
+			}
+		}
+	}
+}
+
+
+
+//*******定时器中断服务程序	*************************************//
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+		static uint16_t tim3_1ms= 0;//中断次数计数器
+	  static uint16_t tim5_1ms= 0;//中断次数计数器
+
+		 //*****定时器3中断服务函数*********************
+		if (htim->Instance == htim3.Instance) //是更新中断
+		{
+			tim3_1ms++;
+			if(tim3_1ms==5)		    //每5次中断执行一次,20ms X 5
+			{
+				//USART2_RX_STA|= (1<<15);	//标记接收完成
+				TIM3->SR&=~(1<<0);		//清除中断标志位		   
+				TIM3_Set(0);			    //关闭TIM3
+				tim3_1ms=0;
+				//printf("TIME 4 INT \r\n");
+			} 
+		}
+		 //*****定时器3中断服务函数*********************
+		if (htim->Instance == htim5.Instance) //是更新中断
+		{
+			tim5_1ms++;
+			if(tim5_1ms==5)		    //每5次中断执行一次,20ms
+			{
+				//USART1_RX_STA |= (1<<15);	//标记接收完成
+				TIM5->SR&=~(1<<0);		//清除中断标志位		   
+				TIM5_Set(0);			    //关闭TIM4
+				tim5_1ms=0;
+				//printf("TIME 5 INT \r\n");
+			} 
+		}
+}
+
+//定时器4
+void TIM3_Set(uint8_t sta)
+{
+	if(sta)
+	{
+		TIM3->CNT=0;                   //计数器清空
+		HAL_TIM_Base_Start_IT(&htim3); //使能定时器3
+	}else 
+		HAL_TIM_Base_Stop_IT(&htim3);  //关闭定时器3
+}
+
+
+//定时器4
+//********************************
+//采用定时器轮询的方式实现延时。
+//		for(int q=0;q<1000;q++)
+//		{
+//				Delay_us(1000);
+//		}
+//调用示例
+//********************************
+
+void TIM5_Set(uint8_t sta)
+{
+	if(sta)
+	{
+		TIM5->CNT=0;                   //计数器清空
+		HAL_TIM_Base_Start_IT(&htim5); //使能定时器5
+	}else 
+		HAL_TIM_Base_Stop_IT(&htim5);  //关闭定时器5 
+}
+
+// 定时器输入捕获PWM
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+	//printf("TIM_IC \r\n");
+  TIM_IC_InitTypeDef sConfigIC;
+	if(htim->Instance == htim4.Instance)
+	{
+		switch(htim->Channel)
+		{
+			case HAL_TIM_ACTIVE_CHANNEL_1:
+				if(ICFLAG_1){
+					CHANNEL_1_RISE = HAL_TIM_ReadCapturedValue(&htim4,TIM_CHANNEL_1);
+					
+					sConfigIC.ICPolarity  = TIM_INPUTCHANNELPOLARITY_FALLING;//下降沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim4,TIM_CHANNEL_1);
+					HAL_TIM_IC_ConfigChannel(&htim4, &sConfigIC, TIM_CHANNEL_1);
+					
+					__HAL_TIM_CLEAR_IT(&htim4, TIM_IT_CC1);
+					if(HAL_TIM_IC_Start_IT(&htim4,TIM_CHANNEL_1)!= HAL_OK)
+					{
+						printf("ERROR\r\n");
+					}
+					
+					ICFLAG_1 = 0;
+				}
+				else{
+					CHANNEL_1_FALL = HAL_TIM_ReadCapturedValue(&htim4,TIM_CHANNEL_1);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;//上升沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim4,TIM_CHANNEL_1);
+					HAL_TIM_IC_ConfigChannel(&htim4, &sConfigIC, TIM_CHANNEL_1);
+					
+					__HAL_TIM_CLEAR_IT(&htim4, TIM_IT_CC1);
+					if(HAL_TIM_IC_Start_IT(&htim4,TIM_CHANNEL_1)!= HAL_OK)
+					{
+						printf("ERROR\r\n");
+					}
+
+					
+					CHANNEL_1_PULSE_WIDE = (CHANNEL_1_FALL > CHANNEL_1_RISE ? (CHANNEL_1_FALL - CHANNEL_1_RISE):(CHANNEL_1_FALL - CHANNEL_1_RISE + 60000));
+					ICFLAG_1 = 1;
+				}
+				//CH1_PWM_test(CHANNEL_1_PULSE_WIDE);
+//				printf("channel1 pulsewidth = %d \r\n", CHANNEL_1_PULSE_WIDE);
+				break;
+	//	 /*************************************************************************/   
+			case HAL_TIM_ACTIVE_CHANNEL_2:
+					if(ICFLAG_2){
+					CHANNEL_2_RISE = HAL_TIM_ReadCapturedValue(&htim4,TIM_CHANNEL_2);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING;//下降沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim4,TIM_CHANNEL_2);
+					////////////////////////////这里没有&，是漏打了还是本来就这样？
+					HAL_TIM_IC_ConfigChannel(&htim4, &sConfigIC, TIM_CHANNEL_2);
+					
+					__HAL_TIM_CLEAR_IT(&htim4, TIM_IT_CC2);
+					if(HAL_TIM_IC_Start_IT(&htim4,TIM_CHANNEL_2)!= HAL_OK)
+					{
+						printf("ERROR\r\n");
+					}  
+					
+					ICFLAG_2 = 0;
+				}
+				else{
+					CHANNEL_2_FALL = HAL_TIM_ReadCapturedValue(&htim4,TIM_CHANNEL_2);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;//上升沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim4,TIM_CHANNEL_2);
+					HAL_TIM_IC_ConfigChannel(&htim4, &sConfigIC, TIM_CHANNEL_2);
+					
+					__HAL_TIM_CLEAR_IT(&htim4, TIM_IT_CC2);
+					if(HAL_TIM_IC_Start_IT(&htim4,TIM_CHANNEL_2)!= HAL_OK)
+					{
+						printf("ERROR\r\n");
+					} 
+					
+					CHANNEL_2_PULSE_WIDE = (CHANNEL_2_FALL > CHANNEL_2_RISE ? CHANNEL_2_FALL - CHANNEL_2_RISE:CHANNEL_2_FALL - CHANNEL_2_RISE + 60000);
+					ICFLAG_2 = 1;
+				}
+				//CH2_PWM_test(CHANNEL_2_PULSE_WIDE);
+//				printf("channel2 pulsewidth = %d \r\n", CHANNEL_2_PULSE_WIDE);
+				break;
+	//	/**************************************************************************/    
+			case HAL_TIM_ACTIVE_CHANNEL_3:
+				if(ICFLAG_3){
+					CHANNEL_3_RISE = HAL_TIM_ReadCapturedValue(&htim4,TIM_CHANNEL_3);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING;//下降沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim4,TIM_CHANNEL_3);
+					HAL_TIM_IC_ConfigChannel(&htim4, &sConfigIC, TIM_CHANNEL_3);
+					
+					__HAL_TIM_CLEAR_IT(&htim4, TIM_IT_CC3);
+					if(HAL_TIM_IC_Start_IT(&htim4,TIM_CHANNEL_3)!= HAL_OK)
+					{
+						printf("ERROR\r\n");
+					}  
+					
+					ICFLAG_3 = 0;
+				}
+				else{
+					CHANNEL_3_FALL = HAL_TIM_ReadCapturedValue(&htim4,TIM_CHANNEL_3);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;//上升沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim4,TIM_CHANNEL_3);
+					HAL_TIM_IC_ConfigChannel(htim, &sConfigIC, TIM_CHANNEL_3);
+					
+					__HAL_TIM_CLEAR_IT(&htim4, TIM_IT_CC3);
+					if(HAL_TIM_IC_Start_IT(&htim4,TIM_CHANNEL_3)!= HAL_OK)
+					{
+						printf("ERROR\r\n");
+					}  
+					
+					CHANNEL_3_PULSE_WIDE = (CHANNEL_3_FALL > CHANNEL_3_RISE ? CHANNEL_3_FALL - CHANNEL_3_RISE:CHANNEL_3_FALL - CHANNEL_3_RISE + 60000);
+					ICFLAG_3 = 1;      
+				}
+				//CH3_PWM_test(CHANNEL_3_PULSE_WIDE);
+//				printf("channel3 pulsewidth = %d \r\n", CHANNEL_3_PULSE_WIDE);
+				break;
+	//			/**************************************************************************/    
+			case HAL_TIM_ACTIVE_CHANNEL_4:
+				if(ICFLAG_4){
+					CHANNEL_4_RISE = HAL_TIM_ReadCapturedValue(&htim4,TIM_CHANNEL_4);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING;//下降沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim4,TIM_CHANNEL_4);
+					HAL_TIM_IC_ConfigChannel(&htim4, &sConfigIC, TIM_CHANNEL_4);
+					
+					__HAL_TIM_CLEAR_IT(&htim4, TIM_IT_CC4);
+					if(HAL_TIM_IC_Start_IT(&htim4,TIM_CHANNEL_4)!= HAL_OK)
+					{
+						printf("ERROR\r\n");
+					}    
+					
+					ICFLAG_4 = 0;
+				}
+				else{
+					CHANNEL_4_FALL = HAL_TIM_ReadCapturedValue(&htim4,TIM_CHANNEL_4);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;//上升沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim4,TIM_CHANNEL_4);
+					////////////////同上
+					HAL_TIM_IC_ConfigChannel(&htim4, &sConfigIC, TIM_CHANNEL_4);
+					
+					__HAL_TIM_CLEAR_IT(&htim4, TIM_IT_CC4);
+					if(HAL_TIM_IC_Start_IT(&htim4,TIM_CHANNEL_4)!= HAL_OK)
+					{
+						printf("ERROR\r\n");
+					}  
+					
+					CHANNEL_4_PULSE_WIDE = (CHANNEL_4_FALL > CHANNEL_4_RISE ? CHANNEL_4_FALL - CHANNEL_4_RISE:CHANNEL_4_FALL - CHANNEL_4_RISE + 60000);
+					ICFLAG_4 = 1;      
+				}
+				//CH4_PWM_test(CHANNEL_3_PULSE_WIDE);
+//				printf("channel4 pulsewidth = %d \r\n", CHANNEL_4_PULSE_WIDE);
+				break;
+		}
+	}
+	
+	//****************************定时器1捕获****************************************
+	if(htim->Instance == htim5.Instance)
+	{
+		switch(htim->Channel)
+		{
+			case HAL_TIM_ACTIVE_CHANNEL_1:
+				if(ICFLAG_5){
+					CHANNEL_5_RISE = HAL_TIM_ReadCapturedValue(&htim5,TIM_CHANNEL_1);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING;//下降沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim5,TIM_CHANNEL_1); 
+					HAL_TIM_IC_ConfigChannel(&htim5, &sConfigIC, TIM_CHANNEL_1);
+					
+					__HAL_TIM_CLEAR_IT(&htim5, TIM_IT_CC1);
+					HAL_TIM_IC_Start_IT(&htim5,TIM_CHANNEL_1);  
+					
+					ICFLAG_5 = 0;
+				}
+				else{
+					CHANNEL_5_FALL = HAL_TIM_ReadCapturedValue(&htim5,TIM_CHANNEL_1);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;//上升沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim5,TIM_CHANNEL_1); 
+					HAL_TIM_IC_ConfigChannel(&htim5, &sConfigIC, TIM_CHANNEL_1);
+					
+				__HAL_TIM_CLEAR_IT(&htim5, TIM_IT_CC1);
+					HAL_TIM_IC_Start_IT(&htim5,TIM_CHANNEL_1); 
+					
+					CHANNEL_5_PULSE_WIDE = (CHANNEL_5_FALL > CHANNEL_5_RISE ? CHANNEL_5_FALL - CHANNEL_5_RISE:CHANNEL_5_FALL - CHANNEL_5_RISE + 60000);
+					ICFLAG_5 = 1;
+				}
+				//CH1_PWM_test(CHANNEL_1_PULSE_WIDE);
+//				printf("channel5 pulsewidth = %d \r\n", CHANNEL_5_PULSE_WIDE);
+				break;
+			case HAL_TIM_ACTIVE_CHANNEL_2:
+				if(ICFLAG_6){
+					CHANNEL_6_RISE = HAL_TIM_ReadCapturedValue(&htim5,TIM_CHANNEL_2);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING;//下降沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim5,TIM_CHANNEL_2); 
+					HAL_TIM_IC_ConfigChannel(&htim5, &sConfigIC, TIM_CHANNEL_2);
+					
+					__HAL_TIM_CLEAR_IT(&htim5, TIM_IT_CC2);
+					HAL_TIM_IC_Start_IT(&htim5,TIM_CHANNEL_2);  
+					
+					ICFLAG_6 = 0;
+				}
+				else{
+					CHANNEL_6_FALL = HAL_TIM_ReadCapturedValue(&htim5,TIM_CHANNEL_2);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;//上升沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim5,TIM_CHANNEL_2); 
+					HAL_TIM_IC_ConfigChannel(&htim5, &sConfigIC, TIM_CHANNEL_2);
+					
+				__HAL_TIM_CLEAR_IT(&htim5, TIM_IT_CC2);
+					HAL_TIM_IC_Start_IT(&htim5,TIM_CHANNEL_2); 
+					
+					CHANNEL_6_PULSE_WIDE = (CHANNEL_6_FALL > CHANNEL_6_RISE ? CHANNEL_6_FALL - CHANNEL_6_RISE:CHANNEL_6_FALL - CHANNEL_6_RISE + 60000);
+					ICFLAG_6 = 1;
+				}
+				//CH1_PWM_test(CHANNEL_1_PULSE_WIDE);
+//				printf("channel5 pulsewidth = %d \r\n", CHANNEL_5_PULSE_WIDE);
+				break;
+			case HAL_TIM_ACTIVE_CHANNEL_3:
+				if(ICFLAG_7){
+					CHANNEL_7_RISE = HAL_TIM_ReadCapturedValue(&htim5,TIM_CHANNEL_3);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING;//下降沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim5,TIM_CHANNEL_3); 
+					HAL_TIM_IC_ConfigChannel(&htim5, &sConfigIC, TIM_CHANNEL_3);
+					
+					__HAL_TIM_CLEAR_IT(&htim5, TIM_IT_CC3);
+					HAL_TIM_IC_Start_IT(&htim5,TIM_CHANNEL_3);  
+					
+					ICFLAG_7 = 0;
+				}
+				else{
+					CHANNEL_7_FALL = HAL_TIM_ReadCapturedValue(&htim5,TIM_CHANNEL_3);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;//上升沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim5,TIM_CHANNEL_3); 
+					HAL_TIM_IC_ConfigChannel(&htim5, &sConfigIC, TIM_CHANNEL_3);
+					
+				__HAL_TIM_CLEAR_IT(&htim5, TIM_IT_CC3);
+					HAL_TIM_IC_Start_IT(&htim5,TIM_CHANNEL_3); 
+					
+					CHANNEL_7_PULSE_WIDE = (CHANNEL_7_FALL > CHANNEL_7_RISE ? CHANNEL_7_FALL - CHANNEL_7_RISE:CHANNEL_7_FALL - CHANNEL_7_RISE + 60000);
+					ICFLAG_7 = 1;
+				}
+				//CH1_PWM_test(CHANNEL_1_PULSE_WIDE);
+//				printf("channel5 pulsewidth = %d \r\n", CHANNEL_5_PULSE_WIDE);
+				break;
+		 /*************************************************************************/   
+			case HAL_TIM_ACTIVE_CHANNEL_4:
+					if(ICFLAG_8){
+					CHANNEL_8_RISE = HAL_TIM_ReadCapturedValue(&htim5,TIM_CHANNEL_4);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING;//下降沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim5,TIM_CHANNEL_4);
+					HAL_TIM_IC_ConfigChannel(&htim5, &sConfigIC, TIM_CHANNEL_4);
+					
+					__HAL_TIM_CLEAR_IT(htim, TIM_IT_CC4);
+					HAL_TIM_IC_Start_IT(htim,TIM_CHANNEL_4);  
+					
+					ICFLAG_8 = 0;
+				}
+				else{
+					CHANNEL_8_FALL = HAL_TIM_ReadCapturedValue(&htim5,TIM_CHANNEL_4);
+					
+					sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;//上升沿
+					sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+					sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+					sConfigIC.ICFilter = 0;
+					HAL_TIM_IC_Stop_IT(&htim5,TIM_CHANNEL_4);
+					HAL_TIM_IC_ConfigChannel(&htim5, &sConfigIC, TIM_CHANNEL_4);
+					
+					__HAL_TIM_CLEAR_IT(&htim5, TIM_IT_CC4);
+					HAL_TIM_IC_Start_IT(&htim5,TIM_CHANNEL_4); 
+					
+					CHANNEL_8_PULSE_WIDE = (CHANNEL_8_FALL > CHANNEL_8_RISE ? CHANNEL_8_FALL - CHANNEL_8_RISE:CHANNEL_8_FALL - CHANNEL_8_RISE + 60000);
+					ICFLAG_8 = 1;
+				}
+				//CH2_PWM_test(CHANNEL_2_PULSE_WIDE);
+//				printf("channel6 pulsewidth = %d \r\n", CHANNEL_6_PULSE_WIDE);
+				break;
+		}
+	}
+}
+
+
+//手动发送mavlink信号
+void MANUAL_CONTROL_Send(int16_t xpoint,int16_t ypoint)
+{
+	uint8_t system_id = 255;          // 发送本条消息帧的设备的系统编号（sys）   
+	uint8_t component_id = 0;         // 发送本条消息帧的设备的单元编号（comp）
+	uint8_t target = 0x01;            //目标系统
+	int16_t x=0;
+	int16_t y=ypoint;
+	int16_t z=0; 
+	int16_t r=0; 
+	uint16_t buttons=0;
+	mavlink_message_t msg;             // msg The MAVLink message to compress the data into
+	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+	uint16_t len;	
+
+	mavlink_msg_manual_control_pack(system_id, component_id, &msg, target,x,y,z,r,buttons);
+	len = mavlink_msg_to_send_buffer(buf, &msg);        
+	//UART_Send_Str(buf,len);	
+	BSP_USART_SendArray_LL( USART1,buf,sizeof(buf));
+}
+
+
+
+void RC_CHANNELS_OVERRIDE_Send(int16_t xpoint,int16_t ypoint)
+{
+	uint8_t system_id=255;
+	uint8_t component_id=0;
+	mavlink_message_t msg; 
+	uint8_t target_system=1;
+	uint8_t target_component=0;
+	uint16_t chan1_raw=ypoint;
+	uint16_t chan2_raw=65535;
+	uint16_t chan3_raw=65535;
+	uint16_t chan4_raw=65535; 
+	uint16_t chan5_raw=65535;
+	uint16_t chan6_raw=65535;
+	uint16_t chan7_raw=65535;
+	uint16_t chan8_raw=65535;
+	uint8_t buf[MAVLINK_MAX_PACKET_LEN];
+	uint16_t len;	
+
+	mavlink_msg_rc_channels_override_pack(system_id,component_id,&msg,target_system,target_component,
+		chan1_raw,chan2_raw,chan3_raw,chan4_raw,chan5_raw,chan6_raw,chan7_raw,chan8_raw);
+	len = mavlink_msg_to_send_buffer(buf, &msg); 
+	BSP_USART_SendArray_LL( USART1,buf,sizeof(buf));
+	//UART_Send_Str(buf,len);	
+
+
+	mavlink_msg_rc_channels_override_pack(system_id,component_id,&msg,target_system,target_component,
+		0,chan2_raw,chan3_raw,chan4_raw,chan5_raw,chan6_raw,chan7_raw,chan8_raw);
+
+	len = mavlink_msg_to_send_buffer(buf, &msg); 
+	//UART_Send_Str(buf,len);	
+	BSP_USART_SendArray_LL( USART1,buf,sizeof(buf));
+}
+
+
+//*****心跳信号*************************
+void heartbeat_Mavlink(void)
+{
+	uint8_t system_id=255;
+	uint8_t component_id=0;
+	mavlink_message_t heart_msg;
+	uint8_t type=0x06;
+	uint8_t autopilot=0x08;
+	uint8_t base_mode=0xc0;
+	uint32_t custom_mode=0x0000; 
+	uint8_t system_status=0x04;
+
+	uint8_t buf_head[MAVLINK_MAX_PACKET_LEN];
+	uint16_t len;
+
+	mavlink_msg_heartbeat_pack( system_id,component_id, &heart_msg,type, autopilot,base_mode,custom_mode,system_status);
+	len = mavlink_msg_to_send_buffer(buf_head, &heart_msg);
+	//UART_Send_Str(buf_head,len);
+	BSP_USART_SendArray_LL( USART1,buf_head,sizeof(buf_head));
+}
+
+
+
+//读取工作模式
+int RC_Read(void)
+{
+	if(CHANNEL_6_PULSE_WIDE>=PWM_Mode_N1 && CHANNEL_6_PULSE_WIDE<=PWM_Mode_N2)
+	{
+		
+	  return 1;
+	}
+  else if(CHANNEL_6_PULSE_WIDE>=PWM_Mode_N2 && CHANNEL_6_PULSE_WIDE<=PWM_Mode_N3)
+	{
+	  return 2;
+	}
+	else if(CHANNEL_6_PULSE_WIDE>=PWM_Mode_N3 && CHANNEL_6_PULSE_WIDE<=PWM_Mode_N4)
+	{
+	  return 3;
+	}
+	else return 1;
+}
+
+//各通道回中
+
+void Back_to_Center(void)
+{
+	Set_PWM_Thr(4500);
+	Set_PWM_Pitch(4500);
+	Set_PWM_Roll(4500);
+	Set_PWM_Yaw(4500);
+	Set_PWM_Mode(4500);
+}
 /* USER CODE END 4 */
 
 /* MPU Configuration */

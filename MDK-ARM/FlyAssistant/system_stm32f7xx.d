@@ -2,7 +2,7 @@ flyassistant\system_stm32f7xx.o: ../Core/Src/system_stm32f7xx.c
 flyassistant\system_stm32f7xx.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f7xx.h
 flyassistant\system_stm32f7xx.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f765xx.h
 flyassistant\system_stm32f7xx.o: ../Drivers/CMSIS/Include/core_cm7.h
-flyassistant\system_stm32f7xx.o: E:\keil5\5.2.1\ARM\ARMCC\Bin\..\include\stdint.h
+flyassistant\system_stm32f7xx.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 flyassistant\system_stm32f7xx.o: ../Drivers/CMSIS/Include/cmsis_version.h
 flyassistant\system_stm32f7xx.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 flyassistant\system_stm32f7xx.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -14,7 +14,7 @@ flyassistant\system_stm32f7xx.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_h
 flyassistant\system_stm32f7xx.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h
 flyassistant\system_stm32f7xx.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f7xx.h
 flyassistant\system_stm32f7xx.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-flyassistant\system_stm32f7xx.o: E:\keil5\5.2.1\ARM\ARMCC\Bin\..\include\stddef.h
+flyassistant\system_stm32f7xx.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 flyassistant\system_stm32f7xx.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc_ex.h
 flyassistant\system_stm32f7xx.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_exti.h
 flyassistant\system_stm32f7xx.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_gpio.h

@@ -6,6 +6,9 @@ SourceFiles=..\Core\Src\main.c;..\Core\Src\stm32f7xx_it.c;..\Core\Src\stm32f7xx_
 HeaderPath=..\Drivers\STM32F7xx_HAL_Driver\Inc;..\Drivers\STM32F7xx_HAL_Driver\Inc\Legacy;..\Drivers\CMSIS\Device\ST\STM32F7xx\Include;..\Drivers\CMSIS\Include;..\Core\Inc;
 CDefines=USE_FULL_LL_DRIVER;USE_HAL_DRIVER;STM32F765xx;USE_FULL_LL_DRIVER;USE_HAL_DRIVER;USE_HAL_DRIVER;
 
+[]
+SourceFiles=;;
+
 [PreviousGenFiles]
 AdvancedFolderStructure=true
 HeaderFileListSize=4
@@ -23,7 +26,4 @@ SourceFiles#2=D:/study/ardupilot/FlyAssistant/Core/Src/main.c
 SourceFolderListSize=1
 SourcePath#0=D:/study/ardupilot/FlyAssistant/Core/Src
 SourceFiles=;
-
-[]
-SourceFiles=;;
 

@@ -3,61 +3,31 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: ¦ÌVision V5.21.1.0
-Copyright (C) 2016 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: yang Dell, yang, LIC=P6F5U-SI8DY-IN9A7-E7FM9-MA3N6-30DQ2
+IDE-Version: ¦ÌVision V5.17.0.0
+Copyright (C) 2015 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: X Kraft, XKraft, LIC=RC9X7-EPC47-AQ80M-XPAKG-NX0RT-V0U3E
  
 Tool Versions:
-Toolchain:       MDK-ARM Professional  Version: 5.21a
-Toolchain Path:  E:\keil5\5.2.1\ARM\ARMCC\Bin
-C Compiler:      Armcc.exe V5.06 update 3 (build 300)
-Assembler:       Armasm.exe V5.06 update 3 (build 300)
-Linker/Locator:  ArmLink.exe V5.06 update 3 (build 300)
-Library Manager: ArmAr.exe V5.06 update 3 (build 300)
-Hex Converter:   FromElf.exe V5.06 update 3 (build 300)
-CPU DLL:         SARMCM3.DLL V5.21a
-Dialog DLL:      DCM.DLL V1.13.8.0
+Toolchain:       MDK-ARM Standard  Version: 5.17
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 1 (build 61)
+Assembler:       Armasm.exe V5.06 update 1 (build 61)
+Linker/Locator:  ArmLink.exe V5.06 update 1 (build 61)
+Library Manager: ArmAr.exe V5.06 update 1 (build 61)
+Hex Converter:   FromElf.exe V5.06 update 1 (build 61)
+CPU DLL:         SARMCM3.DLL V5.17
+Dialog DLL:      DCM.DLL V1.13.4.0
 Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.18.0
-Dialog DLL:      TCM.DLL V1.14.14.0
+Dialog DLL:      TCM.DLL V1.14.6.0
  
 <h2>Project:</h2>
-C:\Users\Dell\Desktop\FlyAssistant\MDK-ARM\FlyAssistant.uvprojx
+D:\study\ardupilot\FlyAssistant\MDK-ARM\FlyAssistant.uvprojx
 Project File Date:  04/07/2022
 
 <h2>Output:</h2>
-*** Using Compiler 'V5.06 update 3 (build 300)', folder: 'E:\keil5\5.2.1\ARM\ARMCC\Bin'
+*** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'FlyAssistant'
-compiling main.c...
-../Core/Src/main.c(221): warning:  #177-D: variable "decodetimer" was declared but never referenced
-  	uint32_t decodetimer;
-../Core/Src/main.c(224): warning:  #177-D: variable "msg1" was declared but never referenced
-  	mavlink_message_t msg1;
-../Core/Src/main.c(225): warning:  #177-D: variable "msg2" was declared but never referenced
-  	mavlink_message_t msg2;
-../Core/Src/main.c(226): warning:  #177-D: variable "msg_tmp" was declared but never referenced
-  	mavlink_message_t msg_tmp;
-../Core/Src/main.c(227): warning:  #177-D: variable "msg_altitude" was declared but never referenced
-  	mavlink_message_t msg_altitude;
-../Core/Src/main.c(74): warning:  #177-D: variable "Recv_Cnt" was declared but never referenced
-  static int Recv_Cnt = 0;
-../Core/Src/main.c(75): warning:  #177-D: variable "UART1_Frame_Flag" was declared but never referenced
-  static int UART1_Frame_Flag = 0;
-../Core/Src/main.c(76): warning:  #177-D: variable "UART2_Frame_Flag" was declared but never referenced
-  static int UART2_Frame_Flag = 0;
-../Core/Src/main.c(78): warning:  #177-D: variable "Recv_Cnt_UART2" was declared but never referenced
-  static int Recv_Cnt_UART2 = 0;
-../Core/Src/main.c(79): warning:  #177-D: variable "MAVLink_message_length" was declared but never referenced
-  static int MAVLink_message_length = 0;
-../Core/Src/main.c(80): warning:  #177-D: variable "packet" was declared but never referenced
-  static mavlink_distance_sensor_t packet;
-../Core/Src/main.c(96): warning:  #177-D: variable "s_dat" was declared but never referenced
-  static      int16_t s_dat[CH_NUM];
-../Core/Src/main.c(135): error:  #114: function "PrintfLogo" was referenced but not defined
-  static void PrintfLogo(void);
-../Core/Src/main.c(136): error:  #114: function "PrintfHardInfo" was referenced but not defined
-  static void PrintfHardInfo(void);
-../Core/Src/main.c: 12 warnings, 2 errors
-"FlyAssistant\FlyAssistant.axf" - 2 Error(s), 12 Warning(s).
+"FlyAssistant\FlyAssistant.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -68,15 +38,14 @@ Package Vendor: ARM
    * Component: CORE Version: 4.3.0
 
 <h2>Collection of Component include folders:</h2>
-  C:\Users\Dell\Desktop\FlyAssistant\MDK-ARM\RTE
-  E:\keil5\5.2.1\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include
-  E:\keil5\5.2.1\ARM\PACK\Keil\STM32F7xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include
+  D:\study\ardupilot\FlyAssistant\MDK-ARM\RTE
+  C:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include
+  C:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include
 
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:4.3.0
-Target not created.
-Build Time Elapsed:  00:00:05
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>
