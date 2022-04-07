@@ -61,27 +61,25 @@ LED3_GPIO_Port >>>>> LED_B_GPIO_Port
 概述：去掉了DSP库&在main.h中加上了ARM_MATH_CM7宏定义
 >>>>>>> 5d16612e79cb8d3cbd364ddeeb1659f1ef61991a
 
+
+###### 修改时间 4.7 18:00 修改人:yxq
+
+==============================================
+
 在main.c中添加htim1定义：
+```C
 //修改前
-
 TIM_HandleTypeDef htim2;
-
 TIM_HandleTypeDef htim3;
-
 TIM_HandleTypeDef htim4;
-
 TIM_HandleTypeDef htim5;
-
 //修改后
-
 TIM_HandleTypeDef htim1;
-
 TIM_HandleTypeDef htim2;
-
 TIM_HandleTypeDef htim3;
-
 TIM_HandleTypeDef htim4;
-
 TIM_HandleTypeDef htim5;
-
+```
 还剩两个error；
+
+===============================================
