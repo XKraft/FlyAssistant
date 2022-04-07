@@ -965,11 +965,12 @@ ARM Macro Assembler    Page 15
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M7.fp.dp --apcs=
 interwork --depend=flyassistant\startup_stm32f765xx.d -oflyassistant\startup_st
-m32f765xx.o -ID:\study\ardupilot\FlyAssistant\MDK-ARM\RTE -IC:\Keil_v5\ARM\PACK
-\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.7.0\D
-rivers\CMSIS\Device\ST\STM32F7xx\Include --predefine="__UVISION_VERSION SETA 51
-7" --predefine="_RTE_ SETA 1" --predefine="STM32F765xx SETA 1" --list=./flyassi
-stant/\startup_stm32f765xx.lst startup_stm32f765xx.s
+m32f765xx.o -IC:\Users\20417\Desktop\FlyAssistant\FlyAssistant\MDK-ARM\RTE -ID:
+\Tools\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -ID:\Tools\Keil_v5\ARM\PA
+CK\Keil\STM32F7xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include --predefi
+ne="__UVISION_VERSION SETA 518" --predefine="_RTE_ SETA 1" --predefine="STM32F7
+65xx SETA 1" --list=./flyassistant/\startup_stm32f765xx.lst startup_stm32f765xx
+.s
 
 
 

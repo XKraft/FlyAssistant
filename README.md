@@ -133,3 +133,7 @@ int ICFLAG_1 = 1,ICFLAG_2 = 1,ICFLAG_3 = 1, ICFLAG_4 = 1, ICFLAG_5 = 1, ICFLAG_6
 发现新版的cubemx里tim2-5没有使能中断,应该要使能的吧,所以这里勾选上重新generate了一下.
 
 ![image-20220407193041758](C:\Users\26281\AppData\Roaming\Typora\typora-user-images\image-20220407193041758.png)
+
+=======================================
+
+开启了串口的中断

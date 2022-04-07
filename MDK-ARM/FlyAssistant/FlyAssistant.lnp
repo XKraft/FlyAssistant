@@ -1,8 +1,5 @@
 --cpu Cortex-M7.fp.dp
 "flyassistant\startup_stm32f765xx.o"
-"flyassistant\main.o"
-"flyassistant\stm32f7xx_it.o"
-"flyassistant\stm32f7xx_hal_msp.o"
 "flyassistant\beep.o"
 "flyassistant\encodeddecoder.o"
 "flyassistant\flycontrol.o"
@@ -10,6 +7,9 @@
 "flyassistant\led.o"
 "flyassistant\uart_api.o"
 "flyassistant\mav_altitude_decode.o"
+"flyassistant\main.o"
+"flyassistant\stm32f7xx_it.o"
+"flyassistant\stm32f7xx_hal_msp.o"
 "flyassistant\stm32f7xx_hal_adc.o"
 "flyassistant\stm32f7xx_hal_adc_ex.o"
 "flyassistant\stm32f7xx_hal_rcc.o"
