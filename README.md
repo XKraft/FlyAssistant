@@ -51,6 +51,16 @@ LED3_GPIO_Port >>>>> LED_B_GPIO_Port
 
 截止到目前编译会报错 37error, 79warning,似乎出现了很多函数重定义问题
 
+<<<<<<< HEAD
+
+=======
+=======================================
+
+修改时间：4/7 - 17：00      修改人：yy
+
+概述：去掉了DSP库&在main.h中加上了ARM_MATH_CM7宏定义
+>>>>>>> 5d16612e79cb8d3cbd364ddeeb1659f1ef61991a
+
 在main.c中添加htim1定义：
 //修改前
 TIM_HandleTypeDef htim2;
