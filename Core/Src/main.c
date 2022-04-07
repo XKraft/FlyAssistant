@@ -21,6 +21,119 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "stdio.h"
+#include "math.h" 
+#include "arm_math.h"
+#include <stdarg.h>
+#include <string.h> 
+#include "mavlink.h"
+#include "mavlink_types.h"
+
+#include "led.h"
+#include "key.h"
+#include "uart_api.h"
+#include "beep.h"
+#include "coderDecoder.h"
+#include "flyControl.h"
+#include "MAV_Altitude_Decode.h"
+
+/* 定义例程名和例程发布日期 */
+#define EXAMPLE_NAME	"V4梦创飞控室内自动飞行例程"
+#define EXAMPLE_DATE	"2021-04-7 "
+#define DEMO_VER		  "V-1.0"
+
+  
+#define Flag_SendToUsart  1 
+
+#define CH_NUM	1	/* 8通道 */
+#define N 3
+#define  voltage_ratio   204  //2.04
+
+
+#define USART1_MAX_RECV_LEN		256				//最大接收缓存字节数
+#define USART2_MAX_RECV_LEN		256		
+#define BUFFSIZE 5 
+
+int CHANNEL_1_RISE=0,CHANNEL_1_FALL=0,CHANNEL_1_PULSE_WIDE=0;
+int CHANNEL_2_RISE=0,CHANNEL_2_FALL=0,CHANNEL_2_PULSE_WIDE=0;
+int CHANNEL_3_RISE=0,CHANNEL_3_FALL=0,CHANNEL_3_PULSE_WIDE=0;
+int CHANNEL_4_RISE=0,CHANNEL_4_FALL=0,CHANNEL_4_PULSE_WIDE=0;
+int CHANNEL_5_RISE=0,CHANNEL_5_FALL=0,CHANNEL_5_PULSE_WIDE=0;
+int CHANNEL_6_RISE=0,CHANNEL_6_FALL=0,CHANNEL_6_PULSE_WIDE=0;
+
+int ICFLAG_1 = 1,ICFLAG_2 = 1,ICFLAG_3 = 1, ICFLAG_4 = 1, ICFLAG_5 = 1, ICFLAG_6 = 1;
+
+ int PWM_Mode_N1 =3000;
+ int PWM_Mode_N2 =4000;
+ int PWM_Mode_N3 =5000;
+ int PWM_Mode_N4 =6000;
+ 
+
+uint16_t    USART1_RX_STA=0; 
+uint16_t    USART2_RX_STA=0; 
+static int Recv_Cnt = 0;
+static int UART1_Frame_Flag = 0;
+static int UART2_Frame_Flag = 0;
+static int heartbeat = 0;
+static int Recv_Cnt_UART2 = 0;
+static int MAVLink_message_length = 0;
+static mavlink_distance_sensor_t packet;
+static float height = 0;
+
+uint8_t USART1_RX_BUF [USART1_MAX_RECV_LEN]; 
+uint8_t USART2_RX_BUF [USART2_MAX_RECV_LEN]; 
+uint8_t FreeBuffer_Encode [USART2_MAX_RECV_LEN];
+uint8_t MAVLink_RECV_BUF[USART2_MAX_RECV_LEN];
+uint8_t MAVLink_TX_BUF [MAVLINK_MAX_PACKET_LEN];
+uint8_t MAVLink_RECV_BUF_FAKE [USART2_MAX_RECV_LEN] = {0};
+
+//回应 头 消息号 数据1  数据2 数据3 数据4 尾
+uint8_t encodeAnswer[11]    ={'#','1',0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,'*'};
+
+#define A 60
+float old_value;
+
+static      int16_t s_dat[CH_NUM];
+float       s_volt[CH_NUM];      
+
+uint32_t    ADC_ReadBuffer[CH_NUM]; 
+float  OutData_Test[4]; 
+float  OutData[4]; 
+char   menu=0;
+
+PID         PID_Control_Att;           //  PID Control Structure 
+float filter(float new_value);
+
+void  OutPut_Data(void);
+float ADC_CvtVolt(void);
+float DataProcessing(float IN_Data);
+float ADC_CvtVolt_and_filter(void);
+float get_adc(char adc_id);
+float filter_av(char filter_id);
+void TIM1_Set(uint8_t sta);
+void TIM4_Set(uint8_t sta);
+void Data_to_VisualScope(void);
+unsigned short CRC_CHECK(unsigned char *Buf, unsigned char CRC_CNT);
+
+
+//mavlink
+void MANUAL_CONTROL_Send(int16_t xpoint,int16_t ypoint);
+void RC_CHANNELS_OVERRIDE_Send(int16_t xpoint,int16_t ypoint);
+void heartbeat_Mavlink(void);
+int  RC_Read(void);
+void Back_to_Center(void);
+	
+
+void end(void)
+{
+	printf("%c",0xff);
+	printf("%c",0xff);
+	printf("%c",0xff);
+}
+
+/* 仅允许本文件内调用的函数声明 */
+static void PrintfLogo(void);
+static void PrintfHardInfo(void);
 
 /* USER CODE END Includes */
 
@@ -31,6 +144,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+ 
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -69,7 +183,20 @@ static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
+////////////////////////////////不懂刚干啥用的
+#ifdef __GNUC__  
+/* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf 
+	 set to 'Yes') calls __io_putchar() */  
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)  
+#else  
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)  
+#endif /* __GNUC__ */  
 
+PUTCHAR_PROTOTYPE
+{
+    BSP_USART_SendData_LL( USART1, ch);
+	  return ch;
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -84,7 +211,21 @@ static void MX_USART3_UART_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	uint16_t i1=0,i2=0;
+	uint16_t rxlen_usart_1;
+	uint16_t rxlen_usart_2;
+	uint8_t cmd=0;
+	uint8_t key;
+	uint32_t RunTime=0;
+	uint32_t decodetimer;
+	uint32_t tickstart = HAL_GetTick();
+	uint32_t ticklast = HAL_GetTick();
+	mavlink_message_t msg1;
+	mavlink_message_t msg2;
+	mavlink_message_t msg_tmp;
+	mavlink_message_t msg_altitude;
+	mavlink_message_t msg_request_data_stream;
+	uint32_t len = 0;
   /* USER CODE END 1 */
 
   /* MPU Configuration--------------------------------------------------------*/
@@ -120,7 +261,62 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
+	Device_Init();
+	PrintfLogo();		  /* 打印例程Logo到串口1 */
+	PrintfHardInfo();	/* 打印硬件接线信息 */
+	
+	/*
+		由于ST固件库的启动文件已经执行了CPU系统时钟的初始化，所以不必再次重复配置系统时钟。
+		启动文件配置了CPU主时钟频率、内部Flash访问速度和可选的外部SRAM FSMC初始化。
+	*/
 
+		//HAL_ADC_Init(&hadc1);
+		//HAL_ADC_Start(&hadc1);		
+			
+		HAL_TIM_PWM_Init(&htim2);
+		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
+		
+		HAL_TIM_PWM_Init(&htim4);
+		HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+		
+
+		/// 使能定时器输入捕获。
+		HAL_TIM_IC_Start_IT(&htim1,TIM_CHANNEL_1);
+		HAL_TIM_IC_Start_IT(&htim1,TIM_CHANNEL_4);
+		
+		HAL_TIM_IC_Start_IT(&htim3,TIM_CHANNEL_1);
+		HAL_TIM_IC_Start_IT(&htim3,TIM_CHANNEL_2);
+		HAL_TIM_IC_Start_IT(&htim3,TIM_CHANNEL_3);
+		HAL_TIM_IC_Start_IT(&htim3,TIM_CHANNEL_4);
+
+		PIDInit(&PID_Control_Att); 
+		LED1_Flash();
+		BEEP_ON();
+		HAL_Delay(1000);              
+		BEEP_OFF();
+		HAL_Delay(1000);   
+		
+		BSP_USART_StartIT_LL( USART2 );
+	  BSP_USART_StartIT_LL( USART1 );
+	
+	  USART1_RX_STA=0;		//清零
+	  USART2_RX_STA=0;		//清零
+	
+		TIM1_Set(0);			  
+	  TIM4_Set(0);	
+		
+///*************************************打一个假包，用于获取消息实际长度*************/	
+//		mavlink_msg_altitude_pack(54,0,&msg_tmp,0,1,1,1,1,1,1);                       //
+//	  MAVLink_message_length=mavlink_msg_to_send_buffer(MAVLink_TX_BUF,&msg_tmp);   //
+///**********************************************************************************/
+
+		mavlink_msg_request_data_stream_pack(54,0,&msg_request_data_stream,0,0,12,5,1);
+		len = mavlink_msg_to_send_buffer(MAVLink_TX_BUF, &msg_request_data_stream);
+		BSP_USART_SendArray_LL(USART2, MAVLink_TX_BUF, len);
+		BSP_USART_SendArray_LL(USART1, MAVLink_TX_BUF, len);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -130,6 +326,165 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+		//		BSP_USART_SendArray_LL(USART1, MAVLink_TX_BUF, len);
+		//LED_G_Flash(); 
+		//mavlink读取飞控
+		key=KeyScanning(0);            //按键扫描
+		switch(key)
+		{				 
+			case  KEY1_PRES:	//控制LED0,LED1互斥点亮
+						LED_B_Flash(); 
+						BEEP_ON();
+			      Unlock();
+						break;
+			case  KEY2_PRES:	//控制LED0翻转
+						LED_G_Flash(); 
+						BEEP_OFF();
+						break;
+		}
+		if(InitedFlag)  
+		{
+//			decodetimer = HAL_GetTick();
+//			if(decodetimer-ticklast>=20)
+//			{
+//				LL_USART_DisableIT_RXNE(USART2);
+//				rxlen_usart_2 = USART2_RX_STA & 0x7FFF;
+//				for(i2=0;i2<rxlen_usart_2;i2++)
+//				{
+//					MAVLink_RECV_BUF[i2]=USART2_RX_BUF[i2];	 //将串口2接收到的数据传输给自由缓冲区
+//				}
+//				if(Mav_Altitude_Decoder(rxlen_usart_2, msg_altitude, MAVLink_RECV_BUF, &height)==1) //分析字符串
+//				{
+//					printf("height = %f \r\n", height);
+//					rxlen_usart_2=0;
+//				  USART2_RX_STA=0;	 //启动下一次接收
+//				}
+//				ticklast = HAL_GetTick();
+//				BSP_USART_StartIT_LL( USART2 );
+//			}
+			
+			 //printf("USART1_RX_STA = %d\r\n", USART1_RX_STA);
+			/********************************UART1接收并处理数据**********************************/
+			 if(USART1_RX_STA & 0X8000)		  //接收到一次数据了
+			 {
+        //printf("USART1 INT =%d \r\n",USART1_RX_STA);				 
+				rxlen_usart_1 = USART1_RX_STA & 0x7FFF;	//得到数据长度
+				//printf("This is a USART1 test rxlen_usart_1 = %d USART1_RX_STA= %d\r\n" ,rxlen_usart_1 ,USART1_RX_STA);
+				for(i1=0;i1<rxlen_usart_1;i1++)
+				{
+					FreeBuffer_Encode[i1]=USART1_RX_BUF[i1];	 //将串口2接收到的数据传输给自由缓冲区
+					//BSP_USART_SendArray_LL( USART1,&FreeBuffer_Encode[i1],1);
+				}
+				cmd=encodeDecode_Analysis(FreeBuffer_Encode,encodeAnswer,rxlen_usart_1); //分析字符串
+				BSP_USART_StartIT_LL( USART1 );
+				rxlen_usart_1=0;
+				USART1_RX_STA=0;	 //启动下一次接收
+			}
+			/********************************UART2接收并处理数据***********************************/
+			if(USART2_RX_STA & 0X8000)		  //接收到一次数据，且超过了预设长度
+			 {
+//				mavlink_msg_request_data_stream_pack(54,0,&msg_request_data_stream,0,0,12,10,0);
+//				len = mavlink_msg_to_send_buffer(MAVLink_TX_BUF, &msg_request_data_stream);
+//				BSP_USART_SendArray_LL(USART2, MAVLink_TX_BUF, len);
+//				BSP_USART_SendArray_LL(USART1, MAVLink_TX_BUF, len);
+        //printf("USART1 INT =%d \r\n",USART1_RX_STA);				 
+				rxlen_usart_2 = USART2_RX_STA & 0x7FFF;	//得到数据长度
+				//printf("This is a USART1 test rxlen_usart_1 = %d USART1_RX_STA= %d\r\n" ,rxlen_usart_1 ,USART1_RX_STA);
+				for(i2=0;i2<rxlen_usart_2;i2++)
+				{
+					MAVLink_RECV_BUF[i2]=USART2_RX_BUF[i2];						//将串口2接收到的数据传输给自由缓冲区
+//					if (MAVLink_RECV_BUF[i2]==0xFE)
+//						printf("%x", MAVLink_RECV_BUF[i2]);
+					//BSP_USART_SendArray_LL( USART1,&FreeBuffer_Encode[i1],1);
+				}
+//				for(i2=0;i2<rxlen_usart_2;i2++)/
+//				{
+//				 if (MAVLink_RECV_BUF[i2]==0xFE)printf("\r\n");						//将串口2接收到的数据传输给自由缓冲区
+					//printf("%x", MAVLink_RECV_BUF[i2]);
+					//BSP_USART_SendData_LL( USART1,MAVLink_RECV_BUF[i2]);
+//			}
+				
+//				Mav_Altitude_Decoder(rxlen_usart_2, msg_altitude, MAVLink_RECV_BUF, &height);
+//				if(Mav_Altitude_Decoder(rxlen_usart_2, msg_altitude, MAVLink_RECV_BUF, &height)==1) //分析字符串
+				{
+					printf("\r\nheight = %f \r\n", height);
+				}
+				//BSP_USART_SendArray_LL(USART1, MAVLink_RECV_BUF, rxlen_usart_2);
+//				//printf("rxlen_usart_2 = %d\r\n", rxlen_usart_2);
+				rxlen_usart_2=0;
+				USART2_RX_STA=0;
+				BSP_USART_StartIT_LL( USART2 );
+					 //启动下一次接收
+//				mavlink_msg_request_data_stream_pack(54,0,&msg_request_data_stream,0,0,12,10,1);
+//				len = mavlink_msg_to_send_buffer(MAVLink_TX_BUF, &msg_request_data_stream);
+//				BSP_USART_SendArray_LL(USART2, MAVLink_TX_BUF, len);
+				}
+			
+				//执行指令的当作
+				if(2==RC_Read())//读取是否直通
+				{ 
+					 Set_PWM_Mode(4500);
+					 switch (cmd)
+					 {
+							case 1: 
+								printf("left  \r\n"); 
+								Loiter(Attitude.Position_x,Attitude.Position_y,Attitude.SetPoint_x,Attitude.SetPoint_y);	
+							  //RC_bridge_Test();
+								heartbeat = 0;
+								break;	
+							case 2: 
+								printf("right \r\n"); 
+							  Go_right(4500+10);
+							  //RC_bridge_Test();
+								heartbeat = 0;
+								break;											
+							case 3: 
+								printf("right \r\n"); 
+							  Go_left(4500+10); 							
+							  //RC_bridge_Test();
+								heartbeat = 0;
+								break;											 
+							default:
+								printf("default\r\n");
+								Back_to_Center();//没有UART数据输入时各通道回中
+							  break;
+					 }
+					 heartbeat++;
+					 if(heartbeat>3000)
+					 {
+						 cmd =0;
+						 heartbeat = 0;
+					 }
+				 }
+				 else if(3==RC_Read())
+				 {
+					 //桥接模式
+					 RC_bridge();
+				 }
+				 else if(1==RC_Read())
+				 {
+					 Set_PWM_Mode(6000);
+					 Set_PWM_Thr(4500);
+					 Set_PWM_Pitch(4500);
+					 Set_PWM_Roll(4500);
+					 Set_PWM_Yaw(4500);
+					 
+				 }
+				 //LED_G_Flash(); 
+				 RC_bridge_Test(); 
+		}
+		//指示灯
+		RunTime = HAL_GetTick() - tickstart;
+		if(RunTime>1000)
+		{
+			//printf("RunTime>1000%d \r\n",RunTime); 
+			tickstart = HAL_GetTick();
+			LED_G_Flash(); 
+			HAL_Delay(10);
+			LED_R_Flash(); 
+			HAL_Delay(20);
+			LED_B_Flash(); 
+		}
   }
   /* USER CODE END 3 */
 }
