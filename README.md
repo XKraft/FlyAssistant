@@ -63,15 +63,25 @@ LED3_GPIO_Port >>>>> LED_B_GPIO_Port
 
 在main.c中添加htim1定义：
 //修改前
+
 TIM_HandleTypeDef htim2;
+
 TIM_HandleTypeDef htim3;
+
 TIM_HandleTypeDef htim4;
+
 TIM_HandleTypeDef htim5;
+
 //修改后
+
 TIM_HandleTypeDef htim1;
+
 TIM_HandleTypeDef htim2;
+
 TIM_HandleTypeDef htim3;
+
 TIM_HandleTypeDef htim4;
+
 TIM_HandleTypeDef htim5;
 
 还剩两个error；
