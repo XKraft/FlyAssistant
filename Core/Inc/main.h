@@ -42,7 +42,9 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#ifndef ARM_MATH_CM7
+#define ARM_MATH_CM7
+#endif
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

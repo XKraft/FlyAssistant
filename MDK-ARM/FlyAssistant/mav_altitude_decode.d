@@ -7,7 +7,7 @@ flyassistant\mav_altitude_decode.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7x
 flyassistant\mav_altitude_decode.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f7xx.h
 flyassistant\mav_altitude_decode.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f765xx.h
 flyassistant\mav_altitude_decode.o: ../Drivers/CMSIS/Include/core_cm7.h
-flyassistant\mav_altitude_decode.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+flyassistant\mav_altitude_decode.o: D:\Tools\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 flyassistant\mav_altitude_decode.o: ../Drivers/CMSIS/Include/cmsis_version.h
 flyassistant\mav_altitude_decode.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 flyassistant\mav_altitude_decode.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -15,7 +15,7 @@ flyassistant\mav_altitude_decode.o: ../Drivers/CMSIS/Include/mpu_armv7.h
 flyassistant\mav_altitude_decode.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/system_stm32f7xx.h
 flyassistant\mav_altitude_decode.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h
 flyassistant\mav_altitude_decode.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-flyassistant\mav_altitude_decode.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+flyassistant\mav_altitude_decode.o: D:\Tools\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 flyassistant\mav_altitude_decode.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc_ex.h
 flyassistant\mav_altitude_decode.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_exti.h
 flyassistant\mav_altitude_decode.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_gpio.h
@@ -37,14 +37,14 @@ flyassistant\mav_altitude_decode.o: ..\MAVLink\common\mavlink.h
 flyassistant\mav_altitude_decode.o: ..\MAVLink\common\version.h
 flyassistant\mav_altitude_decode.o: ..\MAVLink\common\common.h
 flyassistant\mav_altitude_decode.o: ..\MAVLink\protocol.h
-flyassistant\mav_altitude_decode.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+flyassistant\mav_altitude_decode.o: D:\Tools\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 flyassistant\mav_altitude_decode.o: ..\MAVLink\mavlink_types.h
-flyassistant\mav_altitude_decode.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\inttypes.h
+flyassistant\mav_altitude_decode.o: D:\Tools\Keil_v5\ARM\ARMCC\Bin\..\include\inttypes.h
 flyassistant\mav_altitude_decode.o: ..\MAVLink\mavlink_helpers.h
 flyassistant\mav_altitude_decode.o: ..\MAVLink\checksum.h
 flyassistant\mav_altitude_decode.o: ..\MAVLink\common\mavlink.h
 flyassistant\mav_altitude_decode.o: ..\MAVLink\mavlink_conversions.h
-flyassistant\mav_altitude_decode.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+flyassistant\mav_altitude_decode.o: D:\Tools\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
 flyassistant\mav_altitude_decode.o: ..\MAVLink\mavlink_helpers.h
 flyassistant\mav_altitude_decode.o: ..\MAVLink\common\./mavlink_msg_heartbeat.h
 flyassistant\mav_altitude_decode.o: ..\MAVLink\common\./mavlink_msg_sys_status.h
@@ -161,4 +161,4 @@ flyassistant\mav_altitude_decode.o: ..\MAVLink\common\./mavlink_msg_named_value_
 flyassistant\mav_altitude_decode.o: ..\MAVLink\common\./mavlink_msg_named_value_int.h
 flyassistant\mav_altitude_decode.o: ..\MAVLink\common\./mavlink_msg_statustext.h
 flyassistant\mav_altitude_decode.o: ..\MAVLink\common\./mavlink_msg_debug.h
-flyassistant\mav_altitude_decode.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+flyassistant\mav_altitude_decode.o: D:\Tools\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

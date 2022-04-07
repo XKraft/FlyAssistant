@@ -7,7 +7,7 @@ flyassistant\beep.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def.h
 flyassistant\beep.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f7xx.h
 flyassistant\beep.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f765xx.h
 flyassistant\beep.o: ../Drivers/CMSIS/Include/core_cm7.h
-flyassistant\beep.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+flyassistant\beep.o: D:\Tools\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 flyassistant\beep.o: ../Drivers/CMSIS/Include/cmsis_version.h
 flyassistant\beep.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 flyassistant\beep.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -15,7 +15,7 @@ flyassistant\beep.o: ../Drivers/CMSIS/Include/mpu_armv7.h
 flyassistant\beep.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/system_stm32f7xx.h
 flyassistant\beep.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h
 flyassistant\beep.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-flyassistant\beep.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+flyassistant\beep.o: D:\Tools\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 flyassistant\beep.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc_ex.h
 flyassistant\beep.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_exti.h
 flyassistant\beep.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_gpio.h
