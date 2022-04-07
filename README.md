@@ -50,3 +50,18 @@ LED3_GPIO_Port >>>>> LED_B_GPIO_Port
 将v2版本里的main.c文件用户自己编写代码复制到新版本中对应位置后
 
 截止到目前编译会报错 37error, 79warning,似乎出现了很多函数重定义问题
+
+在main.c中添加htim1定义：
+//修改前
+TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim4;
+TIM_HandleTypeDef htim5;
+//修改后
+TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim4;
+TIM_HandleTypeDef htim5;
+
+还剩两个error；

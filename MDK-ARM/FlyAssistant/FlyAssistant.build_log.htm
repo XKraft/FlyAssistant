@@ -3,52 +3,40 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: ¦ÌVision V5.18.0.0
+IDE-Version: ¦ÌVision V5.21.1.0
 Copyright (C) 2016 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: 111 2041729, HP Inc., LIC=8MZI6-D03RV-RFBIZ-JKM6B-BNK03-W4AMQ
+License Information: yang Dell, yang, LIC=P6F5U-SI8DY-IN9A7-E7FM9-MA3N6-30DQ2
  
 Tool Versions:
-Toolchain:       MDK-ARM Professional  Version: 5.18
-Toolchain Path:  D:\Tools\Keil_v5\ARM\ARMCC\Bin
-C Compiler:      Armcc.exe V5.06 update 1 (build 61)
-Assembler:       Armasm.exe V5.06 update 1 (build 61)
-Linker/Locator:  ArmLink.exe V5.06 update 1 (build 61)
-Library Manager: ArmAr.exe V5.06 update 1 (build 61)
-Hex Converter:   FromElf.exe V5.06 update 1 (build 61)
-CPU DLL:         SARMCM3.DLL V5.18
-Dialog DLL:      DCM.DLL V1.13.6.0
+Toolchain:       MDK-ARM Professional  Version: 5.21a
+Toolchain Path:  E:\keil5\5.2.1\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 3 (build 300)
+Assembler:       Armasm.exe V5.06 update 3 (build 300)
+Linker/Locator:  ArmLink.exe V5.06 update 3 (build 300)
+Library Manager: ArmAr.exe V5.06 update 3 (build 300)
+Hex Converter:   FromElf.exe V5.06 update 3 (build 300)
+CPU DLL:         SARMCM3.DLL V5.21a
+Dialog DLL:      DCM.DLL V1.13.8.0
 Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.18.0
-Dialog DLL:      TCM.DLL V1.14.8.0
+Dialog DLL:      TCM.DLL V1.14.14.0
  
 <h2>Project:</h2>
-C:\Users\20417\Desktop\FlyAssistant\FlyAssistant\MDK-ARM\FlyAssistant.uvprojx
+C:\Users\Dell\Desktop\FlyAssistant\MDK-ARM\FlyAssistant.uvprojx
 Project File Date:  04/07/2022
 
 <h2>Output:</h2>
-*** Using Compiler 'V5.06 update 1 (build 61)', folder: 'D:\Tools\Keil_v5\ARM\ARMCC\Bin'
+*** Using Compiler 'V5.06 update 3 (build 300)', folder: 'E:\keil5\5.2.1\ARM\ARMCC\Bin'
 Build target 'FlyAssistant'
-compiling stm32f7xx_it.c...
-compiling beep.c...
-compiling key.c...
-compiling encodedDecoder.c...
-..\Src\encodedDecoder.c(44): warning:  #940-D: missing return statement at end of non-void function "encodeDecode_Analysis"
-  }
-..\Src\encodedDecoder.c: 1 warning, 0 errors
-compiling led.c...
-compiling stm32f7xx_hal_msp.c...
-compiling flyControl.c...
 compiling main.c...
-../Core/Src/main.c(287): error:  #20: identifier "htim1" is undefined
-  		HAL_TIM_IC_Start_IT(&htim1,TIM_CHANNEL_1);
-../Core/Src/main.c(220): warning:  #177-D: variable "decodetimer" was declared but never referenced
+../Core/Src/main.c(221): warning:  #177-D: variable "decodetimer" was declared but never referenced
   	uint32_t decodetimer;
-../Core/Src/main.c(223): warning:  #177-D: variable "msg1" was declared but never referenced
+../Core/Src/main.c(224): warning:  #177-D: variable "msg1" was declared but never referenced
   	mavlink_message_t msg1;
-../Core/Src/main.c(224): warning:  #177-D: variable "msg2" was declared but never referenced
+../Core/Src/main.c(225): warning:  #177-D: variable "msg2" was declared but never referenced
   	mavlink_message_t msg2;
-../Core/Src/main.c(225): warning:  #177-D: variable "msg_tmp" was declared but never referenced
+../Core/Src/main.c(226): warning:  #177-D: variable "msg_tmp" was declared but never referenced
   	mavlink_message_t msg_tmp;
-../Core/Src/main.c(226): warning:  #177-D: variable "msg_altitude" was declared but never referenced
+../Core/Src/main.c(227): warning:  #177-D: variable "msg_altitude" was declared but never referenced
   	mavlink_message_t msg_altitude;
 ../Core/Src/main.c(74): warning:  #177-D: variable "Recv_Cnt" was declared but never referenced
   static int Recv_Cnt = 0;
@@ -68,8 +56,8 @@ compiling main.c...
   static void PrintfLogo(void);
 ../Core/Src/main.c(136): error:  #114: function "PrintfHardInfo" was referenced but not defined
   static void PrintfHardInfo(void);
-../Core/Src/main.c: 12 warnings, 3 errors
-"FlyAssistant\FlyAssistant.axf" - 3 Error(s), 13 Warning(s).
+../Core/Src/main.c: 12 warnings, 2 errors
+"FlyAssistant\FlyAssistant.axf" - 2 Error(s), 12 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -80,15 +68,15 @@ Package Vendor: ARM
    * Component: CORE Version: 4.3.0
 
 <h2>Collection of Component include folders:</h2>
-  C:\Users\20417\Desktop\FlyAssistant\FlyAssistant\MDK-ARM\RTE
-  D:\Tools\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include
-  D:\Tools\Keil_v5\ARM\PACK\Keil\STM32F7xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include
+  C:\Users\Dell\Desktop\FlyAssistant\MDK-ARM\RTE
+  E:\keil5\5.2.1\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include
+  E:\keil5\5.2.1\ARM\PACK\Keil\STM32F7xx_DFP\2.7.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include
 
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:4.3.0
 Target not created.
-Build Time Elapsed:  00:00:11
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>

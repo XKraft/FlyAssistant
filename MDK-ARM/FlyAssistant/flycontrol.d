@@ -7,7 +7,7 @@ flyassistant\flycontrol.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_def
 flyassistant\flycontrol.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f7xx.h
 flyassistant\flycontrol.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f765xx.h
 flyassistant\flycontrol.o: ../Drivers/CMSIS/Include/core_cm7.h
-flyassistant\flycontrol.o: D:\Tools\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+flyassistant\flycontrol.o: E:\keil5\5.2.1\ARM\ARMCC\Bin\..\include\stdint.h
 flyassistant\flycontrol.o: ../Drivers/CMSIS/Include/cmsis_version.h
 flyassistant\flycontrol.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 flyassistant\flycontrol.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -15,7 +15,7 @@ flyassistant\flycontrol.o: ../Drivers/CMSIS/Include/mpu_armv7.h
 flyassistant\flycontrol.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/system_stm32f7xx.h
 flyassistant\flycontrol.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h
 flyassistant\flycontrol.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-flyassistant\flycontrol.o: D:\Tools\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+flyassistant\flycontrol.o: E:\keil5\5.2.1\ARM\ARMCC\Bin\..\include\stddef.h
 flyassistant\flycontrol.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc_ex.h
 flyassistant\flycontrol.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_exti.h
 flyassistant\flycontrol.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_gpio.h
@@ -43,13 +43,13 @@ flyassistant\flycontrol.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_pwr.
 flyassistant\flycontrol.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_gpio.h
 flyassistant\flycontrol.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_dma.h
 flyassistant\flycontrol.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_exti.h
-flyassistant\flycontrol.o: D:\Tools\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+flyassistant\flycontrol.o: E:\keil5\5.2.1\ARM\ARMCC\Bin\..\include\stdio.h
 flyassistant\flycontrol.o: ..\Inc\flyControl.h
 flyassistant\flycontrol.o: ..\Inc\beep.h
 flyassistant\flycontrol.o: ..\Inc\led.h
 flyassistant\flycontrol.o: ..\Inc\uart_api.h
 flyassistant\flycontrol.o: ..\Inc\coderDecoder.h
-flyassistant\flycontrol.o: D:\Tools\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\arm_math.h
-flyassistant\flycontrol.o: D:\Tools\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm7.h
-flyassistant\flycontrol.o: D:\Tools\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-flyassistant\flycontrol.o: D:\Tools\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+flyassistant\flycontrol.o: E:\keil5\5.2.1\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\arm_math.h
+flyassistant\flycontrol.o: E:\keil5\5.2.1\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm7.h
+flyassistant\flycontrol.o: E:\keil5\5.2.1\ARM\ARMCC\Bin\..\include\string.h
+flyassistant\flycontrol.o: E:\keil5\5.2.1\ARM\ARMCC\Bin\..\include\math.h
