@@ -7,7 +7,7 @@ flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f7xx.h
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f765xx.h
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/CMSIS/Include/core_cm7.h
-flyassistant\stm32f7xx_hal_msp.o: D:\program_install\keil\ARM\ARMCC\Bin\..\include\stdint.h
+flyassistant\stm32f7xx_hal_msp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/CMSIS/Include/cmsis_version.h
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -15,7 +15,7 @@ flyassistant\stm32f7xx_hal_msp.o: ../Drivers/CMSIS/Include/mpu_armv7.h
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/system_stm32f7xx.h
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-flyassistant\stm32f7xx_hal_msp.o: D:\program_install\keil\ARM\ARMCC\Bin\..\include\stddef.h
+flyassistant\stm32f7xx_hal_msp.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc_ex.h
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_exti.h
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_gpio.h
@@ -33,5 +33,13 @@ flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pwr_ex.h
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim.h
 flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h
-flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h
-flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h
+flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h
+flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_rcc.h
+flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_bus.h
+flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_cortex.h
+flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_system.h
+flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_utils.h
+flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_pwr.h
+flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_gpio.h
+flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_dma.h
+flyassistant\stm32f7xx_hal_msp.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_exti.h

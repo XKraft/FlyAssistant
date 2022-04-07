@@ -1,0 +1,2 @@
+flyassistant\mav_altitude_decode.o: MAVLink_Decode\MAV_Altitude_Decode.c
+flyassistant\mav_altitude_decode.o: MAVLink_Decode\MAV_Altitude_Decode.h
