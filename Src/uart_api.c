@@ -1,5 +1,5 @@
-#include "stm32f1xx_hal.h"
-#include "stm32f1xx_ll_usart.h"
+#include "stm32f7xx_hal.h"
+#include "stm32f7xx_ll_usart.h"
 #include "uart_api.h"
 
 

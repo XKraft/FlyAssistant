@@ -27,63 +27,112 @@ Project File Date:  04/07/2022
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 1 (build 61)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'FlyAssistant'
-compiling beep.c...
-..\Inc\beep.h(3): error:  #5: cannot open source input file "stm32f1xx_hal.h": No such file or directory
-  #include "stm32f1xx_hal.h"
-..\Src\beep.c: 0 warnings, 1 error
-compiling key.c...
-..\Inc\key.h(3): error:  #5: cannot open source input file "stm32f1xx_hal.h": No such file or directory
-  #include "stm32f1xx_hal.h"
-..\Src\key.c: 0 warnings, 1 error
-compiling MAV_Altitude_Decode.c...
-MAVLink_Decode\MAV_Altitude_Decode.h(3): error:  #5: cannot open source input file "stm32f1xx_hal.h": No such file or directory
-  #include "stm32f1xx_hal.h"
-MAVLink_Decode\MAV_Altitude_Decode.c: 0 warnings, 1 error
 compiling led.c...
-..\Inc\led.h(3): error:  #5: cannot open source input file "stm32f1xx_hal.h": No such file or directory
-  #include "stm32f1xx_hal.h"
-..\Src\led.c: 0 warnings, 1 error
-compiling encodedDecoder.c...
-..\Inc\coderDecoder.h(3): error:  #5: cannot open source input file "stm32f1xx_hal.h": No such file or directory
-  #include "stm32f1xx_hal.h"
-..\Src\encodedDecoder.c: 0 warnings, 1 error
-compiling uart_api.c...
-..\Src\uart_api.c(1): error:  #5: cannot open source input file "stm32f1xx_hal.h": No such file or directory
-  #include "stm32f1xx_hal.h"
-..\Src\uart_api.c: 0 warnings, 1 error
-compiling stm32f7xx_hal_adc.c...
-compiling stm32f7xx_hal_gpio.c...
-compiling stm32f7xx_hal_flash.c...
-compiling stm32f7xx_hal_flash_ex.c...
-compiling stm32f7xx_hal_rcc.c...
-compiling stm32f7xx_hal_adc_ex.c...
-compiling main.c...
-compiling stm32f7xx_hal_rcc_ex.c...
-compiling stm32f7xx_hal_pwr_ex.c...
-compiling stm32f7xx_hal_cortex.c...
-compiling stm32f7xx_hal_pwr.c...
-compiling stm32f7xx_hal_dma_ex.c...
-compiling stm32f7xx_hal_dma.c...
-compiling stm32f7xx_it.c...
 compiling flyControl.c...
-..\Inc\flyControl.h(4): error:  #5: cannot open source input file "stm32f1xx_hal.h": No such file or directory
-  #include "stm32f1xx_hal.h"
-..\Src\flyControl.c: 0 warnings, 1 error
-compiling stm32f7xx_hal_msp.c...
-compiling stm32f7xx_hal_i2c.c...
-compiling stm32f7xx_hal.c...
-compiling stm32f7xx_hal_i2c_ex.c...
-compiling stm32f7xx_hal_exti.c...
-compiling stm32f7xx_ll_exti.c...
-compiling stm32f7xx_hal_tim_ex.c...
-compiling stm32f7xx_ll_gpio.c...
-compiling stm32f7xx_ll_rcc.c...
-compiling system_stm32f7xx.c...
-compiling stm32f7xx_ll_dma.c...
-compiling stm32f7xx_ll_utils.c...
-compiling stm32f7xx_ll_usart.c...
-compiling stm32f7xx_hal_tim.c...
-"FlyAssistant\FlyAssistant.axf" - 7 Error(s), 0 Warning(s).
+..\DSP_LIB\Include\core_cm3.h(76): warning:  #47-D: incompatible redefinition of macro "__CORTEX_M" (declared at line 71 of "../Drivers/CMSIS/Include/core_cm7.h")
+  #define __CORTEX_M                (0x03)                                   /*!< Cortex-M Core                    */
+..\DSP_LIB\Include\core_cm3.h(107): warning:  #47-D: incompatible redefinition of macro "__FPU_USED" (declared at line 79 of "../Drivers/CMSIS/Include/core_cm7.h")
+  #define __FPU_USED       0
+..\DSP_LIB\Include\core_cm3.h(111): warning:  #1215-D: #warning directive: "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+      #warning "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
+..\DSP_LIB\Include\core_cmInstr.h(92): warning:  #47-D: incompatible redefinition of macro "__ISB" (declared at line 418 of "../Drivers/CMSIS/Include/cmsis_armcc.h")
+  #define __ISB()                           __isb(0xF)
+..\DSP_LIB\Include\core_cmInstr.h(100): warning:  #47-D: incompatible redefinition of macro "__DSB" (declared at line 429 of "../Drivers/CMSIS/Include/cmsis_armcc.h")
+  #define __DSB()                           __dsb(0xF)
+..\DSP_LIB\Include\core_cmInstr.h(108): warning:  #47-D: incompatible redefinition of macro "__DMB" (declared at line 440 of "../Drivers/CMSIS/Include/cmsis_armcc.h")
+  #define __DMB()                           __dmb(0xF)
+..\DSP_LIB\Include\core_cmInstr.h(129): error:  #247: function "__REV16" has already been defined
+  __attribute__((section(".rev16_text"))) __STATIC_INLINE __ASM uint32_t __REV16(uint32_t value)
+..\DSP_LIB\Include\core_cmInstr.h(144): error:  #247: function "__REVSH" has already been defined
+  __attribute__((section(".revsh_text"))) __STATIC_INLINE __ASM int32_t __REVSH(int32_t value)
+..\DSP_LIB\Include\core_cmInstr.h(193): warning:  #47-D: incompatible redefinition of macro "__LDREXB" (declared at line 555 of "../Drivers/CMSIS/Include/cmsis_armcc.h")
+  #define __LDREXB(ptr)                     ((uint8_t ) __ldrex(ptr))
+..\DSP_LIB\Include\core_cmInstr.h(203): warning:  #47-D: incompatible redefinition of macro "__LDREXH" (declared at line 568 of "../Drivers/CMSIS/Include/cmsis_armcc.h")
+  #define __LDREXH(ptr)                     ((uint16_t) __ldrex(ptr))
+..\DSP_LIB\Include\core_cmInstr.h(213): warning:  #47-D: incompatible redefinition of macro "__LDREXW" (declared at line 581 of "../Drivers/CMSIS/Include/cmsis_armcc.h")
+  #define __LDREXW(ptr)                     ((uint32_t ) __ldrex(ptr))
+..\DSP_LIB\Include\core_cmInstr.h(225): warning:  #47-D: incompatible redefinition of macro "__STREXB" (declared at line 596 of "../Drivers/CMSIS/Include/cmsis_armcc.h")
+  #define __STREXB(value, ptr)              __strex(value, ptr)
+..\DSP_LIB\Include\core_cmInstr.h(237): warning:  #47-D: incompatible redefinition of macro "__STREXH" (declared at line 611 of "../Drivers/CMSIS/Include/cmsis_armcc.h")
+  #define __STREXH(value, ptr)              __strex(value, ptr)
+..\DSP_LIB\Include\core_cmInstr.h(249): warning:  #47-D: incompatible redefinition of macro "__STREXW" (declared at line 626 of "../Drivers/CMSIS/Include/cmsis_armcc.h")
+  #define __STREXW(value, ptr)              __strex(value, ptr)
+..\DSP_LIB\Include\core_cmFunc.h(64): error:  #247: function "__get_CONTROL" has already been defined
+  __STATIC_INLINE uint32_t __get_CONTROL(void)
+..\DSP_LIB\Include\core_cmFunc.h(77): error:  #247: function "__set_CONTROL" has already been defined
+  __STATIC_INLINE void __set_CONTROL(uint32_t control)
+..\DSP_LIB\Include\core_cmFunc.h(90): error:  #247: function "__get_IPSR" has already been defined
+  __STATIC_INLINE uint32_t __get_IPSR(void)
+..\DSP_LIB\Include\core_cmFunc.h(103): error:  #247: function "__get_APSR" has already been defined
+  __STATIC_INLINE uint32_t __get_APSR(void)
+..\DSP_LIB\Include\core_cmFunc.h(116): error:  #247: function "__get_xPSR" has already been defined
+  __STATIC_INLINE uint32_t __get_xPSR(void)
+..\DSP_LIB\Include\core_cmFunc.h(129): error:  #247: function "__get_PSP" has already been defined
+  __STATIC_INLINE uint32_t __get_PSP(void)
+..\DSP_LIB\Include\core_cmFunc.h(142): error:  #247: function "__set_PSP" has already been defined
+  __STATIC_INLINE void __set_PSP(uint32_t topOfProcStack)
+..\DSP_LIB\Include\core_cmFunc.h(155): error:  #247: function "__get_MSP" has already been defined
+  __STATIC_INLINE uint32_t __get_MSP(void)
+..\DSP_LIB\Include\core_cmFunc.h(168): error:  #247: function "__set_MSP" has already been defined
+  __STATIC_INLINE void __set_MSP(uint32_t topOfMainStack)
+..\DSP_LIB\Include\core_cmFunc.h(181): error:  #247: function "__get_PRIMASK" has already been defined
+  __STATIC_INLINE uint32_t __get_PRIMASK(void)
+..\DSP_LIB\Include\core_cmFunc.h(194): error:  #247: function "__set_PRIMASK" has already been defined
+  __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
+..\DSP_LIB\Include\core_cmFunc.h(225): error:  #247: function "__get_BASEPRI" has already been defined
+  __STATIC_INLINE uint32_t  __get_BASEPRI(void)
+..\DSP_LIB\Include\core_cmFunc.h(238): error:  #247: function "__set_BASEPRI" has already been defined
+  __STATIC_INLINE void __set_BASEPRI(uint32_t basePri)
+..\DSP_LIB\Include\core_cmFunc.h(251): error:  #247: function "__get_FAULTMASK" has already been defined
+  __STATIC_INLINE uint32_t __get_FAULTMASK(void)
+..\DSP_LIB\Include\core_cmFunc.h(264): error:  #247: function "__set_FAULTMASK" has already been defined
+  __STATIC_INLINE void __set_FAULTMASK(uint32_t faultMask)
+..\DSP_LIB\Include\arm_math.h(404): warning:  #47-D: incompatible redefinition of macro "__PKHBT" (declared at line 852 of "../Drivers/CMSIS/Include/cmsis_armcc.h")
+  #define __PKHBT(ARG1, ARG2, ARG3)      ( (((int32_t)(ARG1) <<  0) & (int32_t)0x0000FFFF) | \
+..\DSP_LIB\Include\arm_math.h(406): warning:  #47-D: incompatible redefinition of macro "__PKHTB" (declared at line 855 of "../Drivers/CMSIS/Include/cmsis_armcc.h")
+  #define __PKHTB(ARG1, ARG2, ARG3)      ( (((int32_t)(ARG1) <<  0) & (int32_t)0xFFFF0000) | \
+..\DSP_LIB\Include\arm_math.h(668): warning:  #2687-D: declaration hides built-in function "__qadd8"
+    static __INLINE q31_t __QADD8(
+..\DSP_LIB\Include\arm_math.h(695): warning:  #2687-D: declaration hides built-in function "__qsub8"
+    static __INLINE q31_t __QSUB8(
+..\DSP_LIB\Include\arm_math.h(725): warning:  #2687-D: declaration hides built-in function "__qadd16"
+    static __INLINE q31_t __QADD16(
+..\DSP_LIB\Include\arm_math.h(748): warning:  #2687-D: declaration hides built-in function "__shadd16"
+    static __INLINE q31_t __SHADD16(
+..\DSP_LIB\Include\arm_math.h(771): warning:  #2687-D: declaration hides built-in function "__qsub16"
+    static __INLINE q31_t __QSUB16(
+..\DSP_LIB\Include\arm_math.h(793): warning:  #2687-D: declaration hides built-in function "__shsub16"
+    static __INLINE q31_t __SHSUB16(
+..\DSP_LIB\Include\arm_math.h(815): warning:  #2687-D: declaration hides built-in function "__qasx"
+    static __INLINE q31_t __QASX(
+..\DSP_LIB\Include\arm_math.h(833): warning:  #2687-D: declaration hides built-in function "__shasx"
+    static __INLINE q31_t __SHASX(
+..\DSP_LIB\Include\arm_math.h(856): warning:  #2687-D: declaration hides built-in function "__qsax"
+    static __INLINE q31_t __QSAX(
+..\DSP_LIB\Include\arm_math.h(874): warning:  #2687-D: declaration hides built-in function "__shsax"
+    static __INLINE q31_t __SHSAX(
+..\DSP_LIB\Include\arm_math.h(896): warning:  #2687-D: declaration hides built-in function "__smusdx"
+    static __INLINE q31_t __SMUSDX(
+..\DSP_LIB\Include\arm_math.h(908): warning:  #2687-D: declaration hides built-in function "__smuadx"
+    static __INLINE q31_t __SMUADX(
+..\DSP_LIB\Include\arm_math.h(940): warning:  #2687-D: declaration hides built-in function "__smlad"
+    static __INLINE q31_t __SMLAD(
+..\DSP_LIB\Include\arm_math.h(953): warning:  #2687-D: declaration hides built-in function "__smladx"
+    static __INLINE q31_t __SMLADX(
+..\DSP_LIB\Include\arm_math.h(966): warning:  #2687-D: declaration hides built-in function "__smlsdx"
+    static __INLINE q31_t __SMLSDX(
+..\DSP_LIB\Include\arm_math.h(979): warning:  #2687-D: declaration hides built-in function "__smlald"
+    static __INLINE q63_t __SMLALD(
+..\DSP_LIB\Include\arm_math.h(992): warning:  #2687-D: declaration hides built-in function "__smlaldx"
+    static __INLINE q63_t __SMLALDX(
+..\DSP_LIB\Include\arm_math.h(1005): warning:  #2687-D: declaration hides built-in function "__smuad"
+    static __INLINE q31_t __SMUAD(
+..\DSP_LIB\Include\arm_math.h(1017): warning:  #2687-D: declaration hides built-in function "__smusd"
+    static __INLINE q31_t __SMUSD(
+..\DSP_LIB\Include\arm_math.h(1030): warning:  #2687-D: declaration hides built-in function "__sxtb16"
+    static __INLINE q31_t __SXTB16(
+..\Src\flyControl.c: 34 warnings, 17 errors
+"FlyAssistant\FlyAssistant.axf" - 17 Error(s), 34 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -102,7 +151,7 @@ Package Vendor: ARM
 
    * Component: ARM::CMSIS:CORE:4.3.0
 Target not created.
-Build Time Elapsed:  00:00:24
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

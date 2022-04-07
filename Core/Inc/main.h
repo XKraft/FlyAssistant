@@ -82,10 +82,12 @@ void Error_Handler(void);
 #define KEY2_GPIO_Port GPIOE
 #define KEY3_Pin GPIO_PIN_11
 #define KEY3_GPIO_Port GPIOE
+#define KEY4_Pin GPIO_PIN_12
+#define KEY4_GPIO_Port GPIOE
 #define BEEP_Pin GPIO_PIN_10
 #define BEEP_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */
-
+void   USART_RxCallback(USART_TypeDef *huart);
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

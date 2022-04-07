@@ -45,3 +45,13 @@ flyassistant\flycontrol.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_dma.
 flyassistant\flycontrol.o: ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_exti.h
 flyassistant\flycontrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 flyassistant\flycontrol.o: ..\Inc\flyControl.h
+flyassistant\flycontrol.o: ..\Inc\beep.h
+flyassistant\flycontrol.o: ..\Inc\led.h
+flyassistant\flycontrol.o: ..\Inc\uart_api.h
+flyassistant\flycontrol.o: ..\Inc\coderDecoder.h
+flyassistant\flycontrol.o: ..\DSP_LIB\Include\arm_math.h
+flyassistant\flycontrol.o: ..\DSP_LIB\Include\core_cm3.h
+flyassistant\flycontrol.o: ..\DSP_LIB\Include\core_cmInstr.h
+flyassistant\flycontrol.o: ..\DSP_LIB\Include\core_cmFunc.h
+flyassistant\flycontrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+flyassistant\flycontrol.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

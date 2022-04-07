@@ -3,10 +3,10 @@
 #include "stdio.h"
 #include "beep.h"
 
-#define S1  HAL_GPIO_ReadPin(KEY1_IN_GPIO_Port,KEY1_IN_Pin)
-#define S2  HAL_GPIO_ReadPin(KEY2_IN_GPIO_Port,KEY2_IN_Pin)
-#define S3  HAL_GPIO_ReadPin(KEY3_IN_GPIO_Port,KEY3_IN_Pin)
-#define S4  HAL_GPIO_ReadPin(KEY4_IN_GPIO_Port,KEY4_IN_Pin)
+#define S1  HAL_GPIO_ReadPin(KEY1_GPIO_Port,KEY1_Pin)
+#define S2  HAL_GPIO_ReadPin(KEY2_GPIO_Port,KEY2_Pin)
+#define S3  HAL_GPIO_ReadPin(KEY3_GPIO_Port,KEY3_Pin)
+#define S4  HAL_GPIO_ReadPin(KEY4_GPIO_Port,KEY4_Pin)
 
 
 //按键处理函数

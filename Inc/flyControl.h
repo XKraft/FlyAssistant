@@ -1,7 +1,7 @@
 #ifndef  __CONTROL_H__
 #define  __CONTROL_H__
 
-#include "stm32f1xx_hal.h"
+#include "stm32f7xx_hal.h"
 #include "beep.h"
 #include "led.h"
 #include "uart_api.h"
