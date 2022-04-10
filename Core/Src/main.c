@@ -51,7 +51,8 @@
 
 
 #define USART1_MAX_RECV_LEN		256				//最大接收缓存字节数
-#define USART2_MAX_RECV_LEN		256		
+#define USART2_MAX_RECV_LEN		256	
+#define USART3_MAX_RECV_LEN		256	
 #define BUFFSIZE 5 
 
 int CHANNEL_1_RISE=0,CHANNEL_1_FALL=0,CHANNEL_1_PULSE_WIDE=0;
@@ -74,18 +75,22 @@ int ICFLAG_1 = 1,ICFLAG_2 = 1,ICFLAG_3 = 1, ICFLAG_4 = 1, ICFLAG_5 = 1, ICFLAG_6
 uint16_t    USART1_RX_STA=0; 
 uint16_t    USART2_RX_STA=0;
 uint16_t    USART3_RX_STA=0; 
-static int Recv_Cnt = 0;
+static int Recv_Cnt_UART1 = 0;
+static int Recv_Cnt_UART2 = 0;
+static int Recv_Cnt_UART3 = 0;
 static int UART1_Frame_Flag = 0;
 static int UART2_Frame_Flag = 0;
+static int UART3_Frame_Flag = 0;
 static int heartbeat = 0;
-static int Recv_Cnt_UART2 = 0;
 static int MAVLink_message_length = 0;
 static mavlink_distance_sensor_t packet;
 static float height = 0;
 
 uint8_t USART1_RX_BUF [USART1_MAX_RECV_LEN]; 
 uint8_t USART2_RX_BUF [USART2_MAX_RECV_LEN]; 
+uint8_t USART3_RX_BUF [USART3_MAX_RECV_LEN];
 uint8_t FreeBuffer_Encode [USART2_MAX_RECV_LEN];
+uint8_t FreeBuffer_Encode_3[USART3_MAX_RECV_LEN];
 uint8_t MAVLink_RECV_BUF[USART2_MAX_RECV_LEN];
 uint8_t MAVLink_TX_BUF [MAVLINK_MAX_PACKET_LEN];
 uint8_t MAVLink_RECV_BUF_FAKE [USART2_MAX_RECV_LEN] = {0};
@@ -114,6 +119,7 @@ float ADC_CvtVolt_and_filter(void);
 float get_adc(char adc_id);
 float filter_av(char filter_id);
 void TIM3_Set(uint8_t sta);
+void TIM2_Set(uint8_t sta);
 void TIM5_Set(uint8_t sta);
 void Data_to_VisualScope(void);
 unsigned short CRC_CHECK(unsigned char *Buf, unsigned char CRC_CNT);
@@ -392,6 +398,20 @@ int main(void)
 				USART2_RX_STA=0;
 				BSP_USART_StartIT_LL( USART2 ); //启动下一次接收
 				}
+        /*****************************USART3接收&处理数据***********************************/
+        if(USART3_RX_STA & 0x8000)    //接收满一次数据
+        {
+          rxlen_usart_3 = USART3_RX_STA & 0x7FFF;   //得到数据长度
+          for(i3=0;i3<rxlen_usart_3;i3++)
+          {
+            FreeBuffer_Encode_3[i3] = USART3_RX_BUF[i3];    //将串口3接收的数据传输到自由缓冲区
+          }
+          //解码处理...->待写；注意多个设备向飞控助手串口发送时，飞控助手如何全部处理
+          //cmd=encodeDecode_Analysis(FreeBuffer_Encode_3,encodeAnswer,rxlen_usart_1); //分析字符串
+          rxlen_usart_3 = 0;
+          USART3_RX_STA = 0;
+          BSP_USART_StartIT_LL( USART3 );   //启动下一次接收
+        }
 			
 				//执行指令的当作
 				if(2==RC_Read())//读取是否直通
@@ -1491,64 +1511,61 @@ if ( ( new_value - old_value > A ) || ( old_value - new_value > A ))
 }
 
 
-
+/****************************串口中断回调*****************************/
 void   USART_RxCallback(USART_TypeDef *huart)
 { 
 	mavlink_message_t msg;
 	mavlink_status_t status;
-	//***********串口1中断**********************************
+	
 	if(LL_USART_IsActiveFlag_RXNE(huart) && LL_USART_IsEnabledIT_RXNE(huart))
-  { // 接收到来自上位机的命令
+  { 
+  //***********串口1中断**********************************
 		if(huart == USART1)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart);
-			if(data == 0x23)
+			if(data == 0x23)  //表示字符 '#',即约定的通信包开头
 			{
 				UART1_Frame_Flag = 1;
 			}
 			//printf("USART1_RX_STA =%d data = %d \r\n",USART1_RX_STA , data);
-      if(((USART1_RX_STA  & (1<<15))==0) && (UART1_Frame_Flag == 1))		//还可以接收数据 ,最高位不为1.
+      if(((USART1_RX_STA  & (1<<15))==0) && (UART1_Frame_Flag == 1))	//还可以接收数据 ,最高位不为1.
 			{
-				//TIM4->CNT=0;				//计数器清空
-				USART1_RX_BUF[USART1_RX_STA++] = data;				//记录接收到的值
-				Recv_Cnt ++;
-				if(USART1_RX_STA == 0)
-				{
-					Recv_Cnt=0;
-				//	TIM4_Set(1);	 	                //使能定时器4的中断 
-				}
-				else if(Recv_Cnt>=11)
-				{
-				 Recv_Cnt=0;
-				 UART1_Frame_Flag = 0;
+        TIM3->CNT=0;				//计数器清空
+        if(USART1_RX_STA == 0)  //新一轮接收数据
+        {
+          Recv_Cnt_UART1 = 0;
+          TIM3_Set(1);  //中断方式开启定时器3
+        } 
+        USART1_RX_BUF[USART1_RX_STA++] = data;				//记录接收到的值
+				Recv_Cnt_UART1 ++;  //计数值增1
+				if(Recv_Cnt_UART1 >= 11){
+          //接满一个通信包的长度
+          Recv_Cnt_UART1=0;
+          UART1_Frame_Flag = 0;
 				 USART1_RX_STA |= 1<<15;				 //强制标记接收完成
-			   LL_USART_DisableIT_RXNE(USART1);
-				}
-				//BSP_USART_SendArray_LL( USART1,&USART1_RX_BUF[USART1_RX_STA],1);
-				//printf("USART1 INT =%d \r\n",USART1_RX_STA);
+			   LL_USART_DisableIT_RXNE(USART1);   //关闭接收非空中断
+        }
 			}	
 		}
-	 //***********串口2中断**********************************
+	 //***********串口2中断，主要用于与Mavlink协议的设备连接*********************
 		else if(huart == USART2)
 		{
 			uint8_t data = LL_USART_ReceiveData8(huart);
-			if(data == 0xFE)
+			if(data == 0xFE)    //根据mavlink包格式设置
 			{
 				UART2_Frame_Flag = 1;
 			}
-			//printf("USART2_RX_STA =%d data = %d \r\n",USART2_RX_STA , data);
       if((USART2_RX_STA  & (1<<15))==0 && (UART2_Frame_Flag == 1))		//还可以接收数据 ,最高位不为1.
 			{
-				//TIM1->CNT=0;				//计数器清空
-				USART2_RX_BUF[USART2_RX_STA++] = data;
-				Recv_Cnt_UART2 ++;
-				if(USART2_RX_STA == 0)
+				TIM5->CNT=0;				//计数器5清空
+        if(USART2_RX_STA == 0)
 				{
-					//TIM1_Set(1);	 	                //使能定时器1的中断
-						Recv_Cnt_UART2 = 0;
+					TIM5_Set(1);	 	                //使能定时器1的中断
+					Recv_Cnt_UART2 = 0;
 				}
-        //printf("USART2 INT =%d \r\n",USART2_RX_STA);				
-				else if(Recv_Cnt_UART2>=50)
+				USART2_RX_BUF[USART2_RX_STA++] = data;
+				Recv_Cnt_UART2 ++;			
+				if(Recv_Cnt_UART2>=50)
 				{
 					Recv_Cnt_UART2 = 0;
 					UART2_Frame_Flag = 0;
@@ -1557,6 +1574,33 @@ void   USART_RxCallback(USART_TypeDef *huart)
 				}	
 			}
 		}
+    //*******************串口3中断****************
+    else if(huart == USART3)
+    {
+      uint8_t data = LL_USART_ReceiveData8(huart);  //串口接收一个字节
+      if(data == 0x23)  //表示字符 '#',即约定的通信包开头
+      {
+        UART3_Frame_Flag = 1; 
+      }
+      if((USART3_RX_STA & (1<<15))==0 && (UART3_Frame_Flag==1))
+      {
+        TIM2->CNT = 0;    //定时器2清空
+        if(USART3_RX_STA == 0)    //新一轮接收开始
+        {
+          TIM2_Set(1);
+          Recv_Cnt_UART3 = 0;
+        }
+        USART3_RX_BUF[USART3_RX_STA++] = data;  //存入接收缓冲区
+        Recv_Cnt_UART3 ++;  //接收计数
+        if(Recv_Cnt_UART3>=11)   //接满一个通信包的长度
+				{
+          Recv_Cnt_UART3=0;
+          UART3_Frame_Flag = 0;
+				  USART3_RX_STA |= 1<<15;				 //强制标记接收完成
+			    LL_USART_DisableIT_RXNE(USART3);   //关闭接收非空中断
+				}
+      }
+    }
 	}
 }
 
@@ -1567,36 +1611,50 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 		static uint16_t tim3_1ms= 0;//中断次数计数器
 	  static uint16_t tim5_1ms= 0;//中断次数计数器
+    static uint16_t tim2_1ms= 0;//中断次数计数器
 
-		 //*****定时器3中断服务函数*********************
+		 //*****定时器3中断服务函数->在串口1中使用到更新中断*********
 		if (htim->Instance == htim3.Instance) //是更新中断
 		{
 			tim3_1ms++;
-			if(tim3_1ms==5)		    //每5次中断执行一次,20ms X 5
+			if(tim3_1ms==5)		    //每5次中断执行一次,20ms X 5 -> 与其他模块发送数据的间隔相符合即可
 			{
-				//USART2_RX_STA|= (1<<15);	//标记接收完成
+				USART1_RX_STA|= (1<<15);	//标记接收完成
 				TIM3->SR&=~(1<<0);		//清除中断标志位		   
 				TIM3_Set(0);			    //关闭TIM3
 				tim3_1ms=0;
 				//printf("TIME 4 INT \r\n");
 			} 
 		}
-		 //*****定时器3中断服务函数*********************
+		 //*****定时器5中断服务函数->用于串口2*********************
 		if (htim->Instance == htim5.Instance) //是更新中断
 		{
 			tim5_1ms++;
 			if(tim5_1ms==5)		    //每5次中断执行一次,20ms
 			{
-				//USART1_RX_STA |= (1<<15);	//标记接收完成
+				USART2_RX_STA |= (1<<15);	//标记接收完成
 				TIM5->SR&=~(1<<0);		//清除中断标志位		   
 				TIM5_Set(0);			    //关闭TIM5
 				tim5_1ms=0;
 				//printf("TIME 5 INT \r\n");
 			} 
 		}
+     //*****定时器2中断服务函数->用于串口3*********************
+		if (htim->Instance == htim2.Instance) //是更新中断
+		{
+			tim2_1ms++;
+			if(tim5_1ms==5)		    //每5次中断执行一次,20ms
+			{
+				USART3_RX_STA |= (1<<15);	//标记接收完成
+				TIM2->SR&=~(1<<0);		//清除中断标志位		   
+				TIM2_Set(0);			    //关闭TIM5
+				tim2_1ms=0;
+				//printf("TIME 2 INT \r\n");
+			} 
+		}
 }
 
-//定时器4
+//定时器3
 void TIM3_Set(uint8_t sta)
 {
 	if(sta)
@@ -1606,9 +1664,19 @@ void TIM3_Set(uint8_t sta)
 	}else 
 		HAL_TIM_Base_Stop_IT(&htim3);  //关闭定时器3
 }
+//定时器2
+void TIM2_Set(uint8_t sta)
+{
+	if(sta)
+	{
+		TIM2->CNT=0;                   //计数器清空
+		HAL_TIM_Base_Start_IT(&htim2); //使能定时器2
+	}else 
+		HAL_TIM_Base_Stop_IT(&htim2);  //关闭定时器2
+}
 
 
-//定时器4
+//定时器3
 //********************************
 //采用定时器轮询的方式实现延时。
 //		for(int q=0;q<1000;q++)

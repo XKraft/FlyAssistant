@@ -37,7 +37,7 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 				//printf("Attitude Position x = %d, Attitude Position y = %d, SetPoint x = %d, SetPoint y = %d \r\n", Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y);
 			  return 1;
 			}
-			/* 以下指令可能会用于完成要求的飞行动作， */
+			/* 以下指令可能会用于完成要求的飞行动作 */
 			else if(inBuf[1] == '2')		//向右飞
 			{
 				return 2;
@@ -56,6 +56,7 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 			}
 			else return 0;
 		}
+		else return 0;
 	}
 	else return 0;
 }
