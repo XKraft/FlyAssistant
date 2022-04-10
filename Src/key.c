@@ -23,7 +23,7 @@ uint8_t KeyScanning(uint8_t mode)
     {
 			  //printf(" KEY_Scan \r\n");
         HAL_Delay(30);
-        key_up=0;
+        key_up=0;	//表示按键已按下
         if(S1==0)        
 				{
 					printf("KEY1_PRES \r\n");

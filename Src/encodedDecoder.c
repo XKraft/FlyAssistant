@@ -18,9 +18,8 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
     //********************* #头***消息号，数据位1L，数据位1H,数据位2L,数据位2H,数据位3L,数据位3H,数据位4L,数据位4H*****帧尾* *********
 		if((inBuf[0]==0x23) && (inBuf[10]==0x2A))
 		{
-			
 			//开始
-			if(inBuf[1]=='1')
+			if(inBuf[1]=='1')		//悬停到目标点
 			{
 				//printf("*****第一号消息************ \r\n"); 
 				Attitude.Position_x = inBuf[3]<<8|inBuf[2];
@@ -38,6 +37,24 @@ uint8_t encodeDecode_Analysis(uint8_t *inBuf,uint8_t *outBuf,uint16_t Buflen)
 				//printf("Attitude Position x = %d, Attitude Position y = %d, SetPoint x = %d, SetPoint y = %d \r\n", Attitude.Position_x, Attitude.Position_y, Attitude.SetPoint_x, Attitude.SetPoint_y);
 			  return 1;
 			}
+			/* 以下指令可能会用于完成要求的飞行动作， */
+			else if(inBuf[1] == '2')		//向右飞
+			{
+				return 2;
+			}
+			else if(inBuf[1] == '3')		//向左飞
+			{
+				return 3;
+			}
+			else if(inBuf[1] == '4')		//向右飞
+			{
+				return 4;
+			}
+			else if(inBuf[1] == '5')		//向右飞
+			{
+				return 5;
+			}
+			else return 0;
 		}
 	}
 	else return 0;

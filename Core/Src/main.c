@@ -72,7 +72,8 @@ int ICFLAG_1 = 1,ICFLAG_2 = 1,ICFLAG_3 = 1, ICFLAG_4 = 1, ICFLAG_5 = 1, ICFLAG_6
  
 
 uint16_t    USART1_RX_STA=0; 
-uint16_t    USART2_RX_STA=0; 
+uint16_t    USART2_RX_STA=0;
+uint16_t    USART3_RX_STA=0; 
 static int Recv_Cnt = 0;
 static int UART1_Frame_Flag = 0;
 static int UART2_Frame_Flag = 0;
@@ -213,9 +214,10 @@ PUTCHAR_PROTOTYPE
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint16_t i1=0,i2=0;
+	uint16_t i1=0,i2=0,i3=0;
 	uint16_t rxlen_usart_1;
 	uint16_t rxlen_usart_2;
+  uint16_t rxlen_usart_3;
 	uint8_t cmd=0;
 	uint8_t key;
 	uint32_t RunTime=0;
@@ -307,8 +309,9 @@ int main(void)
 		BEEP_OFF();
 		HAL_Delay(1000);   
 		
-		BSP_USART_StartIT_LL( USART2 );
-	  BSP_USART_StartIT_LL( USART1 );
+		BSP_USART_StartIT_LL( USART1 );
+	  BSP_USART_StartIT_LL( USART2 );
+    BSP_USART_StartIT_LL( USART3 );
 	
 	  USART1_RX_STA=0;		//清零
 	  USART2_RX_STA=0;		//清零
@@ -323,6 +326,7 @@ int main(void)
 
 		mavlink_msg_request_data_stream_pack(54,0,&msg_request_data_stream,0,0,12,5,1);
 		len = mavlink_msg_to_send_buffer(MAVLink_TX_BUF, &msg_request_data_stream);
+    BSP_USART_SendArray_LL(USART3, MAVLink_TX_BUF, len);
 		BSP_USART_SendArray_LL(USART2, MAVLink_TX_BUF, len);
 		BSP_USART_SendArray_LL(USART1, MAVLink_TX_BUF, len);
   /* USER CODE END 2 */
@@ -350,28 +354,8 @@ int main(void)
 						BEEP_OFF();
 						break;
 		}
-		if(InitedFlag)  
+		if(InitedFlag)  //确保设备已初始化
 		{
-//			decodetimer = HAL_GetTick();
-//			if(decodetimer-ticklast>=20)
-//			{
-//				LL_USART_DisableIT_RXNE(USART2);
-//				rxlen_usart_2 = USART2_RX_STA & 0x7FFF;
-//				for(i2=0;i2<rxlen_usart_2;i2++)
-//				{
-//					MAVLink_RECV_BUF[i2]=USART2_RX_BUF[i2];	 //将串口2接收到的数据传输给自由缓冲区
-//				}
-//				if(Mav_Altitude_Decoder(rxlen_usart_2, msg_altitude, MAVLink_RECV_BUF, &height)==1) //分析字符串
-//				{
-//					printf("height = %f \r\n", height);
-//					rxlen_usart_2=0;
-//				  USART2_RX_STA=0;	 //启动下一次接收
-//				}
-//				ticklast = HAL_GetTick();
-//				BSP_USART_StartIT_LL( USART2 );
-//			}
-			
-			 //printf("USART1_RX_STA = %d\r\n", USART1_RX_STA);
 			/********************************UART1接收并处理数据**********************************/
 			 if(USART1_RX_STA & 0X8000)		  //接收到一次数据了
 			 {
@@ -390,42 +374,23 @@ int main(void)
 			}
 			/********************************UART2接收并处理数据***********************************/
 			if(USART2_RX_STA & 0X8000)		  //接收到一次数据，且超过了预设长度
-			 {
-//				mavlink_msg_request_data_stream_pack(54,0,&msg_request_data_stream,0,0,12,10,0);
-//				len = mavlink_msg_to_send_buffer(MAVLink_TX_BUF, &msg_request_data_stream);
-//				BSP_USART_SendArray_LL(USART2, MAVLink_TX_BUF, len);
-//				BSP_USART_SendArray_LL(USART1, MAVLink_TX_BUF, len);
-        //printf("USART1 INT =%d \r\n",USART1_RX_STA);				 
+			 {			 
 				rxlen_usart_2 = USART2_RX_STA & 0x7FFF;	//得到数据长度
 				//printf("This is a USART1 test rxlen_usart_1 = %d USART1_RX_STA= %d\r\n" ,rxlen_usart_1 ,USART1_RX_STA);
 				for(i2=0;i2<rxlen_usart_2;i2++)
 				{
 					MAVLink_RECV_BUF[i2]=USART2_RX_BUF[i2];						//将串口2接收到的数据传输给自由缓冲区
-//					if (MAVLink_RECV_BUF[i2]==0xFE)
-//						printf("%x", MAVLink_RECV_BUF[i2]);
-					//BSP_USART_SendArray_LL( USART1,&FreeBuffer_Encode[i1],1);
 				}
-//				for(i2=0;i2<rxlen_usart_2;i2++)/
-//				{
-//				 if (MAVLink_RECV_BUF[i2]==0xFE)printf("\r\n");						//将串口2接收到的数据传输给自由缓冲区
-					//printf("%x", MAVLink_RECV_BUF[i2]);
-					//BSP_USART_SendData_LL( USART1,MAVLink_RECV_BUF[i2]);
-//			}
-				
 //				Mav_Altitude_Decoder(rxlen_usart_2, msg_altitude, MAVLink_RECV_BUF, &height);
-//				if(Mav_Altitude_Decoder(rxlen_usart_2, msg_altitude, MAVLink_RECV_BUF, &height)==1) //分析字符串
-				{
-					printf("\r\nheight = %f \r\n", height);
-				}
+				// if(Mav_Altitude_Decoder(rxlen_usart_2, msg_altitude, MAVLink_RECV_BUF, &height)==1) //分析字符串
+				// {
+				// 	printf("\r\nheight = %f \r\n", height);
+				// }
 				//BSP_USART_SendArray_LL(USART1, MAVLink_RECV_BUF, rxlen_usart_2);
 //				//printf("rxlen_usart_2 = %d\r\n", rxlen_usart_2);
 				rxlen_usart_2=0;
 				USART2_RX_STA=0;
-				BSP_USART_StartIT_LL( USART2 );
-					 //启动下一次接收
-//				mavlink_msg_request_data_stream_pack(54,0,&msg_request_data_stream,0,0,12,10,1);
-//				len = mavlink_msg_to_send_buffer(MAVLink_TX_BUF, &msg_request_data_stream);
-//				BSP_USART_SendArray_LL(USART2, MAVLink_TX_BUF, len);
+				BSP_USART_StartIT_LL( USART2 ); //启动下一次接收
 				}
 			
 				//执行指令的当作
@@ -434,25 +399,35 @@ int main(void)
 					 Set_PWM_Mode(4500);
 					 switch (cmd)
 					 {
-							case 1: 
-								printf("left  \r\n"); 
+							case 1:   //悬停->前往目标点
+								printf("loiter  \r\n"); 
 								Loiter(Attitude.Position_x,Attitude.Position_y,Attitude.SetPoint_x,Attitude.SetPoint_y);	
 							  //RC_bridge_Test();
 								heartbeat = 0;
 								break;	
-							case 2: 
+							case 2:   //向右飞
 								printf("right \r\n"); 
 							  Go_right(4500+10);
 							  //RC_bridge_Test();
 								heartbeat = 0;
 								break;											
-							case 3: 
-								printf("right \r\n"); 
+							case 3:   //向左飞
+								printf("left \r\n"); 
 							  Go_left(4500+10); 							
 							  //RC_bridge_Test();
 								heartbeat = 0;
-								break;											 
-							default:
+								break;
+              case 4:   //向前飞
+                printf("ahead \r\n");
+                Go_ahead(4500+10);
+                heartbeat = 0;
+                break;
+              case 5:   //向后飞
+                printf("back \r\n");
+                Go_back(4500+10);
+                heartbeat = 0;
+                break;
+							default:  //各通道回中
 								printf("default\r\n");
 								Back_to_Center();//没有UART数据输入时各通道回中
 							  break;
