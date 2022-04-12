@@ -86,6 +86,8 @@ void Error_Handler(void);
 #define Pitch_Out_GPIO_Port GPIOA
 #define Thr_Out_Pin GPIO_PIN_3
 #define Thr_Out_GPIO_Port GPIOA
+#define BUZZER_Pin GPIO_PIN_4
+#define BUZZER_GPIO_Port GPIOA
 #define AUX2_In_Pin GPIO_PIN_5
 #define AUX2_In_GPIO_Port GPIOA
 #define Yaw_In_Pin GPIO_PIN_6
@@ -96,14 +98,6 @@ void Error_Handler(void);
 #define Pitch_In_GPIO_Port GPIOB
 #define Thr_In_Pin GPIO_PIN_1
 #define Thr_In_GPIO_Port GPIOB
-#define KEY1_Pin GPIO_PIN_9
-#define KEY1_GPIO_Port GPIOE
-#define KEY2_Pin GPIO_PIN_10
-#define KEY2_GPIO_Port GPIOE
-#define KEY3_Pin GPIO_PIN_11
-#define KEY3_GPIO_Port GPIOE
-#define KEY4_Pin GPIO_PIN_12
-#define KEY4_GPIO_Port GPIOE
 #define Ctrl_In_Pin GPIO_PIN_10
 #define Ctrl_In_GPIO_Port GPIOB
 #define Mode_In_Pin GPIO_PIN_11
@@ -116,8 +110,14 @@ void Error_Handler(void);
 #define AUX1_Out_GPIO_Port GPIOD
 #define AUX2_Out_Pin GPIO_PIN_15
 #define AUX2_Out_GPIO_Port GPIOD
-#define BUZZER_Pin GPIO_PIN_10
-#define BUZZER_GPIO_Port GPIOC
+#define KEY1_Pin GPIO_PIN_0
+#define KEY1_GPIO_Port GPIOD
+#define KEY2_Pin GPIO_PIN_1
+#define KEY2_GPIO_Port GPIOD
+#define KEY3_Pin GPIO_PIN_2
+#define KEY3_GPIO_Port GPIOD
+#define KEY4_Pin GPIO_PIN_3
+#define KEY4_GPIO_Port GPIOD
 #define AUX1_In_Pin GPIO_PIN_3
 #define AUX1_In_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */

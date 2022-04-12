@@ -156,4 +156,4 @@ int ICFLAG_1 = 1,ICFLAG_2 = 1,ICFLAG_3 = 1, ICFLAG_4 = 1, ICFLAG_5 = 1, ICFLAG_6
   
   - 添加定时器2更新中断
   
-  
+  为方便布线，更改蜂鸣器和key对应的引脚
